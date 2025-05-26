@@ -1,0 +1,102 @@
+<div class="dashboard-container">
+  <h1 class="page-title">Dashboard</h1>
+  
+  <div class="stats-cards">
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-value">{{ stats.totalPatients }}</div>
+        <div class="stat-label">Total Patients</div>
+      </mat-card-content>
+    </mat-card>
+    
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-value">{{ stats.activeTreatments }}</div>
+        <div class="stat-label">Active Treatments</div>
+      </mat-card-content>
+    </mat-card>
+    
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-value">{{ stats.completedSurgeries }}</div>
+        <div class="stat-label">Completed Surgeries</div>
+      </mat-card-content>
+    </mat-card>
+    
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-value">{{ stats.upcomingSurgeries }}</div>
+        <div class="stat-label">Upcoming Surgeries</div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  
+  <div class="dashboard-sections">
+    <div class="section-left">
+      <mat-card class="recent-patients">
+        <mat-card-header>
+          <mat-card-title>Recent Patients</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <table class="patients-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Surgery</th>
+                <th>Date</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let patient of recentPatients">
+                <td>{{ patient.name }}</td>
+                <td>{{ patient.age }}</td>
+                <td>{{ patient.surgery }}</td>
+                <td>{{ patient.date | date:'mediumDate' }}</td>
+                <td>
+                  <span class="status-badge" [ngClass]="patient.status.toLowerCase()">
+                    {{ patient.status }}
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    
+    <div class="section-right">
+      <mat-card class="quick-actions">
+        <mat-card-header>
+          <mat-card-title>Quick Actions</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="action-buttons">
+            <button mat-raised-button color="primary" (click)="navigateToPatientJourney()">
+              <mat-icon>add</mat-icon> New Patient Journey
+            </button>
+            <button mat-raised-button color="accent">
+              <mat-icon>calendar_today</mat-icon> Schedule Appointment
+            </button>
+            <button mat-raised-button color="warn">
+              <mat-icon>report</mat-icon> Generate Reports
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+      
+      <mat-card class="upcoming-card">
+        <mat-card-header>
+          <mat-card-title>Today's Schedule</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="empty-state">
+            <mat-icon>event_busy</mat-icon>
+            <p>No appointments scheduled for today</p>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

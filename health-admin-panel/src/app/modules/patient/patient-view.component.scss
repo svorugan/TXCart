@@ -1,0 +1,705 @@
+// Patient Journey Component Styles
+.patient-journey-container {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  
+  .mat-horizontal-stepper-header-container {
+    margin-bottom: 20px;
+  }
+  
+  ::ng-deep {
+    .mat-step-header {
+      .mat-step-icon {
+        background-color: #3f51b5;
+        color: white;
+      }
+      
+      .mat-step-icon-selected {
+        background-color: #3f51b5;
+        color: white;
+      }
+      
+      .mat-step-label {
+        color: rgba(0, 0, 0, 0.87);
+        font-weight: 500;
+      }
+      
+      .mat-step-label-selected {
+        color: #3f51b5;
+        font-weight: 600;
+      }
+    }
+  }
+  
+  .step-content {
+    position: relative;
+    min-height: 400px;
+    
+    .step-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      
+      .left-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      
+      h2 {
+        margin: 0;
+        text-align: center;
+      }
+      
+      .right-spacer {
+        width: 100px; // Match approximate width of left-actions for balance
+      }
+      
+      .filter-btn {
+        display: flex;
+        align-items: center;
+        
+        .filter-count {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          min-width: 20px;
+          height: 20px;
+          border-radius: 10px;
+          background-color: #3f51b5;
+          color: white;
+          font-size: 12px;
+          margin-left: 8px;
+          padding: 0 6px;
+        }
+      }
+    }
+    
+    // Sidebar for filters
+    .sidebar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 320px;
+      height: 100%;
+      background-color: white;
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+      overflow-y: auto;
+      z-index: 10;
+      padding: 0;
+      transform: translateX(0);
+      transition: transform 0.3s ease;
+      
+      .filter-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 20px;
+        margin-bottom: 0;
+        border-bottom: 1px solid #e0e0e0;
+        background-color: #f9f9f9;
+        
+        .filter-title {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          
+          mat-icon {
+            color: #666;
+            font-size: 20px;
+          }
+          
+          h3 {
+            margin: 0;
+            font-weight: 500;
+            font-size: 16px;
+            color: #333;
+          }
+        }
+        
+        .close-button {
+          color: #666;
+          margin-right: -8px;
+        }
+      }
+      
+      .filter-section {
+        padding: 16px 20px;
+        margin-bottom: 10px;
+        border-bottom: 1px solid #f0f0f0;
+        
+        h4 {
+          margin: 0 0 16px 0;
+          font-size: 15px;
+          font-weight: 500;
+          color: #333;
+        }
+        
+        .filter-group {
+          margin-bottom: 16px;
+          
+          &:last-child {
+            margin-bottom: 0;
+          }
+          
+          mat-form-field {
+            width: 100%;
+          }
+          
+          mat-checkbox {
+            display: block;
+            margin-bottom: 12px;
+            color: #555;
+            font-size: 14px;
+          }
+        }
+      }
+      
+      .filter-actions {
+        padding: 16px 20px;
+        display: flex;
+        justify-content: center;
+        
+        button {
+          min-width: 150px;
+          padding: 6px 16px;
+          font-size: 14px;
+          
+          mat-icon {
+            font-size: 18px;
+            height: 18px;
+            width: 18px;
+            margin-right: 4px;
+          }
+        }
+      }
+    }
+    
+    // Surgery cards
+    .surgery-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      
+      .surgery-card {
+        border-radius: 8px;
+        border: 1px solid #e0e0e0;
+        overflow: hidden;
+        transition: all 0.2s ease;
+        cursor: pointer;
+        
+        &:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        &.selected {
+          border: 2px solid #3f51b5;
+          box-shadow: 0 5px 15px rgba(63, 81, 181, 0.2);
+        }
+        
+        .surgery-image {
+          height: 160px;
+          background-color: #f5f5f5;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          
+          img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+          }
+        }
+        
+        .surgery-content {
+          padding: 15px;
+          
+          h3 {
+            margin: 0 0 10px 0;
+            font-size: 18px;
+          }
+          
+          p {
+            margin: 0 0 10px 0;
+            color: #666;
+            font-size: 14px;
+          }
+          
+          .surgery-price {
+            font-weight: 600;
+            color: #3f51b5;
+            font-size: 16px;
+          }
+        }
+      }
+    }
+    
+    // Results list for surgeons
+    .results-list {
+      margin-left: 340px;
+      
+      &.full-width {
+        margin-left: 0;
+      }
+      
+      .result-card {
+        display: flex;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        overflow: hidden;
+        transition: all 0.2s ease;
+        
+        &:hover {
+          box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        &.selected {
+          border: 2px solid #3f51b5;
+          box-shadow: 0 5px 15px rgba(63, 81, 181, 0.2);
+        }
+        
+        .card-left {
+          width: 120px;
+          position: relative;
+          background-color: #f5f5f5;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 15px;
+          
+          .tier-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: #ffc107;
+            color: #333;
+            font-size: 12px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            
+            &.premium {
+              background-color: #ffc107;
+            }
+            
+            &.standard {
+              background-color: #4caf50;
+              color: white;
+            }
+            
+            &.economy {
+              background-color: #2196f3;
+              color: white;
+            }
+          }
+          
+          .surgeon-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            overflow: hidden;
+            
+            img {
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+            }
+          }
+          
+          .implant-image {
+            width: 80px;
+            height: 80px;
+            
+            img {
+              width: 100%;
+              height: 100%;
+              object-fit: contain;
+            }
+          }
+        }
+        
+        .card-middle {
+          flex-grow: 1;
+          padding: 15px;
+          
+          h3 {
+            margin: 0 0 5px 0;
+            font-size: 18px;
+          }
+          
+          p {
+            margin: 0 0 10px 0;
+            color: #666;
+            font-size: 14px;
+          }
+          
+          .surgeon-details {
+            .detail-row {
+              display: flex;
+              margin-bottom: 8px;
+              
+              .detail-item {
+                display: flex;
+                align-items: center;
+                margin-right: 20px;
+                
+                mat-icon {
+                  font-size: 18px;
+                  height: 18px;
+                  width: 18px;
+                  margin-right: 5px;
+                  color: #666;
+                }
+                
+                span {
+                  font-size: 14px;
+                  color: #333;
+                }
+              }
+            }
+          }
+          
+          .implant-features {
+            margin-top: 10px;
+            
+            .feature-item {
+              display: flex;
+              align-items: center;
+              margin-bottom: 5px;
+              
+              mat-icon {
+                font-size: 16px;
+                height: 16px;
+                width: 16px;
+                margin-right: 5px;
+                color: #4caf50;
+              }
+              
+              span {
+                font-size: 14px;
+                color: #333;
+              }
+            }
+          }
+        }
+        
+        .card-right {
+          width: 150px;
+          padding: 15px;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          align-items: center;
+          background-color: #f9f9f9;
+          
+          .fees-section, .price-section {
+            text-align: center;
+            margin-bottom: 15px;
+            
+            .fee-label, .price-label {
+              font-size: 12px;
+              color: #666;
+              margin-bottom: 5px;
+            }
+            
+            .fee-amount, .price-amount {
+              font-weight: 600;
+              font-size: 18px;
+              color: #3f51b5;
+            }
+          }
+          
+          button {
+            width: 100%;
+          }
+        }
+      }
+    }
+    
+    // Map container
+    .map-container {
+      display: flex;
+      height: 500px;
+      
+      .map {
+        flex-grow: 1;
+        height: 100%;
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      
+      .zone-list {
+        width: 300px;
+        margin-left: 20px;
+        overflow-y: auto;
+        
+        .zone-item {
+          display: flex;
+          padding: 15px;
+          border: 1px solid #e0e0e0;
+          border-radius: 8px;
+          margin-bottom: 10px;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          
+          &:hover {
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+          }
+          
+          &.selected {
+            border: 2px solid #3f51b5;
+            box-shadow: 0 3px 8px rgba(63, 81, 181, 0.2);
+          }
+          
+          .zone-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 10px;
+            margin-top: 2px;
+          }
+          
+          .zone-details {
+            flex-grow: 1;
+            
+            h4 {
+              margin: 0 0 5px 0;
+              font-size: 16px;
+            }
+            
+            p {
+              margin: 0;
+              font-size: 14px;
+              color: #666;
+            }
+          }
+        }
+      }
+    }
+    
+    // Patient form
+    .patient-form {
+      max-width: 800px;
+      margin: 0 auto;
+      
+      .form-row {
+        margin-bottom: 20px;
+        display: flex;
+        gap: 20px;
+        
+        mat-form-field {
+          width: 100%;
+        }
+        
+        .half-width {
+          width: calc(50% - 10px);
+        }
+      }
+    }
+    
+    // Journey summary
+    .journey-summary {
+      max-width: 800px;
+      margin: 0 auto;
+      
+      .summary-section {
+        margin-bottom: 30px;
+        
+        h3 {
+          margin: 0 0 15px 0;
+          font-size: 18px;
+          color: #333;
+          border-bottom: 1px solid #e0e0e0;
+          padding-bottom: 10px;
+        }
+        
+        .summary-card {
+          display: flex;
+          border: 1px solid #e0e0e0;
+          border-radius: 8px;
+          overflow: hidden;
+          
+          .card-image {
+            width: 100px;
+            background-color: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            
+            img {
+              max-width: 100%;
+              max-height: 80px;
+              object-fit: contain;
+            }
+          }
+          
+          .card-content {
+            flex-grow: 1;
+            padding: 15px;
+            
+            h4 {
+              margin: 0 0 5px 0;
+              font-size: 16px;
+            }
+            
+            p {
+              margin: 0;
+              font-size: 14px;
+              color: #666;
+            }
+          }
+        }
+        
+        .cost-breakdown {
+          border: 1px solid #e0e0e0;
+          border-radius: 8px;
+          padding: 15px;
+          
+          .cost-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #e0e0e0;
+            
+            &:last-child {
+              border-bottom: none;
+              margin-bottom: 0;
+              padding-bottom: 0;
+            }
+            
+            .cost-label {
+              font-size: 14px;
+              color: #333;
+            }
+            
+            .cost-value {
+              font-size: 14px;
+              font-weight: 600;
+              color: #333;
+            }
+            
+            &.total {
+              margin-top: 15px;
+              border-top: 2px solid #e0e0e0;
+              padding-top: 10px;
+              
+              .cost-label, .cost-value {
+                font-size: 16px;
+                font-weight: 700;
+                color: #3f51b5;
+              }
+            }
+          }
+        }
+      }
+    }
+    
+    // Action buttons
+    .action-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 30px;
+      padding: 20px 0;
+      border-top: 1px solid #e0e0e0;
+      clear: both;
+      width: 100%;
+      position: sticky;
+      bottom: 0;
+      background-color: white;
+      z-index: 5;
+      
+      button {
+        min-width: 120px;
+      }
+    }
+  }
+}
+
+// Responsive styles
+@media (max-width: 768px) {
+  .patient-journey-container {
+    padding: 10px;
+    
+    .step-content {
+      .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1000;
+        transform: translateX(-100%);
+        
+        &.show {
+          transform: translateX(0);
+        }
+      }
+      
+      .results-list {
+        margin-left: 0;
+        
+        .result-card {
+          flex-direction: column;
+          
+          .card-left {
+            width: 100%;
+            height: 120px;
+          }
+          
+          .card-right {
+            width: 100%;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            
+            .fees-section, .price-section {
+              margin-bottom: 0;
+              text-align: left;
+            }
+            
+            button {
+              width: auto;
+            }
+          }
+        }
+      }
+      
+      .map-container {
+        flex-direction: column;
+        height: auto;
+        
+        .map {
+          height: 300px;
+          margin-bottom: 20px;
+        }
+        
+        .zone-list {
+          width: 100%;
+          margin-left: 0;
+          max-height: 300px;
+        }
+      }
+      
+      .patient-form {
+        .form-row {
+          flex-direction: column;
+          gap: 0;
+          
+          .half-width {
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,551 @@
+<div class="doctor-add">
+  <h2>{{ pageTitle }}</h2>
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <mat-tab-group animationDuration="300ms">
+      <!-- 1. Basic Information -->
+      <mat-tab label="Basic Information">
+        <div class="card-layout">
+          <!-- Personal Details Card -->
+          <div class="info-card">
+            <h3>Personal Details</h3>
+            <div class="tab-content">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Full Name</mat-label>
+                <input matInput formControlName="name" required placeholder="Dr. Aditi Rao">
+                <mat-icon matSuffix>person</mat-icon>
+              </mat-form-field>
+              
+              <mat-form-field appearance="outline" class="half-width">
+                <mat-label>Gender</mat-label>
+                <mat-select formControlName="gender" required>
+                  <mat-option value="Male">Male</mat-option>
+                  <mat-option value="Female">Female</mat-option>
+                  <mat-option value="Other">Other</mat-option>
+                </mat-select>
+                <mat-icon matSuffix>wc</mat-icon>
+              </mat-form-field>
+              
+              <mat-form-field appearance="outline" class="half-width">
+                <mat-label>Photo URL</mat-label>
+                <input matInput formControlName="photoUrl" placeholder="https://example.com/doctor-photo.jpg">
+                <mat-icon matSuffix>image</mat-icon>
+              </mat-form-field>
+            </div>
+          </div>
+          
+          <!-- Professional Identity Card -->
+          <div class="info-card">
+            <h3>Professional Identity</h3>
+            <div class="tab-content">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Specialty</mat-label>
+                <input matInput formControlName="specialty" required placeholder="Orthopedic Surgeon">
+                <mat-icon matSuffix>local_hospital</mat-icon>
+              </mat-form-field>
+              
+              <mat-form-field appearance="outline" class="half-width">
+                <mat-label>Experience</mat-label>
+                <mat-select formControlName="experience" required>
+                  <mat-option value="5+ years">5+ years</mat-option>
+                  <mat-option value="10+ years">10+ years</mat-option>
+                  <mat-option value="15+ years">15+ years</mat-option>
+                  <mat-option value="20+ years">20+ years</mat-option>
+                </mat-select>
+                <mat-icon matSuffix>history</mat-icon>
+              </mat-form-field>
+              
+              <mat-form-field appearance="outline" class="half-width">
+                <mat-label>Languages Spoken</mat-label>
+                <input matInput formControlName="languagesSpoken" placeholder="English, Hindi, Telugu">
+                <mat-hint>Enter languages separated by commas</mat-hint>
+                <mat-icon matSuffix>translate</mat-icon>
+              </mat-form-field>
+            </div>
+          </div>
+          
+          <!-- Qualifications Card -->
+          <div class="info-card">
+            <h3>Qualifications</h3>
+            <div class="dynamic-list">
+              <div *ngFor="let ctrl of qualificationsControls; let i = index" class="dynamic-list-item">
+                <mat-form-field appearance="outline" style="flex:1">
+                  <mat-label>Qualification {{i+1}}</mat-label>
+                  <input matInput [formControl]="ctrl" placeholder="MBBS, MS (Orthopedics), DNB">
+                  <mat-icon matSuffix>school</mat-icon>
+                </mat-form-field>
+                <button mat-mini-fab color="primary" type="button" (click)="addItem(qualifications)" aria-label="Add qualification">
+                  <mat-icon>add</mat-icon>
+                </button>
+                <button mat-mini-fab color="warn" type="button" (click)="removeItem(qualifications, i)" 
+                        [disabled]="qualifications.length === 1" aria-label="Remove qualification">
+                  <mat-icon>remove</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+      
+      <!-- 2. Professional Details -->
+      <mat-tab label="Professional Details">
+        <div class="card-layout">
+          <!-- License & Credentials Card -->
+          <div class="info-card">
+            <h3>License & Credentials</h3>
+            <div class="tab-content">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Medical License No.</mat-label>
+                <input matInput formControlName="medicalLicenseNo" placeholder="ORTHO-56789">
+                <mat-icon matSuffix>verified</mat-icon>
+              </mat-form-field>
+              
+              <mat-form-field appearance="outline" class="half-width">
+                <mat-label>Fellowship Type</mat-label>
+                <mat-select formControlName="fellowshipType" required>
+                  <mat-option value="National">National Fellowship</mat-option>
+                  <mat-option value="International">International Fellowship</mat-option>
+                  <mat-option value="Multiple">Multiple Fellowships</mat-option>
+                </mat-select>
+                <mat-icon matSuffix>workspace_premium</mat-icon>
+              </mat-form-field>
+              
+              <mat-form-field appearance="outline" class="half-width">
+                <mat-label>Location Base</mat-label>
+                <mat-select formControlName="locationBase" required>
+                  <mat-option value="Local">Local (Hyderabad)</mat-option>
+                  <mat-option value="Other Cities">Other Cities (India-wide)</mat-option>
+                </mat-select>
+                <mat-icon matSuffix>location_on</mat-icon>
+              </mat-form-field>
+            </div>
+          </div>
+          
+          <!-- Hospital Affiliations Card -->
+          <div class="info-card">
+            <h3>Hospital Affiliations</h3>
+            <div class="dynamic-list">
+              <div *ngFor="let ctrl of hospitalAffiliationsControls; let i = index" class="dynamic-list-item">
+                <mat-form-field appearance="outline" style="flex:1">
+                  <mat-label>Hospital {{i+1}}</mat-label>
+                  <input matInput [formControl]="ctrl" placeholder="Apollo Hospitals, Hyderabad">
+                  <mat-icon matSuffix>business</mat-icon>
+                </mat-form-field>
+                <button mat-mini-fab color="primary" type="button" (click)="addItem(hospitalAffiliations)" aria-label="Add hospital">
+                  <mat-icon>add</mat-icon>
+                </button>
+                <button mat-mini-fab color="warn" type="button" (click)="removeItem(hospitalAffiliations, i)" 
+                        [disabled]="hospitalAffiliations.length === 1" aria-label="Remove hospital">
+                  <mat-icon>remove</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Clinic Information Card -->
+          <div class="info-card">
+            <h3>Clinic Information</h3>
+            <div class="tab-content">
+              <mat-form-field appearance="outline" class="half-width">
+                <mat-label>Clinic Name</mat-label>
+                <input matInput formControlName="clinicName" placeholder="Rao Ortho Clinic">
+                <mat-icon matSuffix>medical_services</mat-icon>
+              </mat-form-field>
+              
+              <mat-form-field appearance="outline" class="half-width">
+                <mat-label>Clinic Location</mat-label>
+                <input matInput formControlName="clinicLocation" placeholder="Banjara Hills">
+                <mat-icon matSuffix>place</mat-icon>
+              </mat-form-field>
+              
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Working Hours</mat-label>
+                <textarea matInput formControlName="workingHours" placeholder="Mon–Fri: 9 AM – 1 PM, 4 PM – 7 PM
+Sat: 9 AM – 1 PM" rows="3"></textarea>
+                <mat-icon matSuffix>schedule</mat-icon>
+              </mat-form-field>
+              
+              <div class="full-width">
+                <mat-checkbox formControlName="telehealth" color="primary">Telehealth Available</mat-checkbox>
+              </div>
+              
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Availability</mat-label>
+                <mat-select formControlName="availability" required>
+                  <mat-option value="Next 3 days">Available next 3 days</mat-option>
+                  <mat-option value="Weekend only">Weekend slots only</mat-option>
+                </mat-select>
+                <mat-icon matSuffix>event_available</mat-icon>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+      
+      <!-- 3. Areas of Expertise & Patient Services -->
+      <mat-tab label="Expertise & Services">
+        <div class="card-layout">
+          <!-- Areas of Expertise Card -->
+          <div class="info-card">
+            <h3>Areas of Expertise</h3>
+            <div class="dynamic-list">
+              <div *ngFor="let ctrl of areasOfExpertiseControls; let i = index" class="dynamic-list-item">
+                <mat-form-field appearance="outline" style="flex:1">
+                  <mat-label>Expertise {{i+1}}</mat-label>
+                  <input matInput [formControl]="ctrl" placeholder="Joint Replacement Surgery (Knee, Hip)">
+                  <mat-icon matSuffix>star</mat-icon>
+                </mat-form-field>
+                <button mat-mini-fab color="primary" type="button" (click)="addItem(areasOfExpertise)" aria-label="Add expertise">
+                  <mat-icon>add</mat-icon>
+                </button>
+                <button mat-mini-fab color="warn" type="button" (click)="removeItem(areasOfExpertise, i)" 
+                        [disabled]="areasOfExpertise.length === 1" aria-label="Remove expertise">
+                  <mat-icon>remove</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Patient Services Card -->
+          <div class="info-card">
+            <h3>Patient Services</h3>
+            <div class="dynamic-list">
+              <div *ngFor="let ctrl of patientServicesControls; let i = index" class="dynamic-list-item">
+                <mat-form-field appearance="outline" style="flex:1">
+                  <mat-label>Service {{i+1}}</mat-label>
+                  <input matInput [formControl]="ctrl" placeholder="Consultation, Digital X-ray Interpretation">
+                  <mat-icon matSuffix>medical_services</mat-icon>
+                </mat-form-field>
+                <button mat-mini-fab color="primary" type="button" (click)="addItem(patientServices)" aria-label="Add service">
+                  <mat-icon>add</mat-icon>
+                </button>
+                <button mat-mini-fab color="warn" type="button" (click)="removeItem(patientServices, i)" 
+                        [disabled]="patientServices.length === 1" aria-label="Remove service">
+                  <mat-icon>remove</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Surgical Practice Card (Legacy) -->
+          <div class="info-card">
+            <h3>Surgical Practice</h3>
+            <div class="tab-content">
+              <mat-form-field appearance="outline" class="half-width">
+                <mat-label>Surgery Volume</mat-label>
+                <input matInput type="number" formControlName="surgeryVolume" placeholder="250">
+                <mat-icon matSuffix>analytics</mat-icon>
+              </mat-form-field>
+              
+              <mat-form-field appearance="outline" class="half-width">
+                <mat-label>Implant Preference</mat-label>
+                <input matInput formControlName="implantPreference" placeholder="Smith & Nephew, Stryker">
+                <mat-icon matSuffix>biotech</mat-icon>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+      
+      <!-- 4. Booking & Contact -->
+      <mat-tab label="Booking & Contact">
+        <div class="card-layout">
+          <!-- Consultation Fees Card -->
+          <div class="info-card">
+            <h3>Consultation Fees</h3>
+            <div class="tab-content">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Consultation Fee</mat-label>
+                <input matInput formControlName="consultationFee" placeholder="₹1000 (in-person), ₹800 (online)">
+                <mat-icon matSuffix>payments</mat-icon>
+              </mat-form-field>
+            </div>
+          </div>
+          
+          <!-- Appointment Options Card -->
+          <div class="info-card">
+            <h3>Appointment Options</h3>
+            <div class="dynamic-list">
+              <div *ngFor="let ctrl of appointmentOptionsControls; let i = index" class="dynamic-list-item">
+                <mat-form-field appearance="outline" style="flex:1">
+                  <mat-label>Option {{i+1}}</mat-label>
+                  <input matInput [formControl]="ctrl" placeholder="Book via App / Phone / Walk-in">
+                  <mat-icon matSuffix>event_available</mat-icon>
+                </mat-form-field>
+                <button mat-mini-fab color="primary" type="button" (click)="addItem(appointmentOptions)" aria-label="Add option">
+                  <mat-icon>add</mat-icon>
+                </button>
+                <button mat-mini-fab color="warn" type="button" (click)="removeItem(appointmentOptions, i)" 
+                        [disabled]="appointmentOptions.length === 1" aria-label="Remove option">
+                  <mat-icon>remove</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Contact Information Card -->
+          <div class="info-card">
+            <h3>Contact Information</h3>
+            <div class="tab-content">
+              <mat-form-field appearance="outline" class="half-width">
+                <mat-label>Email</mat-label>
+                <input matInput formControlName="email" type="email" placeholder="doctor@example.com">
+                <mat-icon matSuffix>email</mat-icon>
+              </mat-form-field>
+              
+              <mat-form-field appearance="outline" class="half-width">
+                <mat-label>Phone</mat-label>
+                <input matInput formControlName="phone" placeholder="+91 9876543210">
+                <mat-icon matSuffix>phone</mat-icon>
+              </mat-form-field>
+              
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Location Map URL</mat-label>
+                <input matInput formControlName="locationMap" placeholder="https://maps.google.com/?q=...">
+                <mat-icon matSuffix>map</mat-icon>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+      
+      <!-- 5. About & Reviews -->
+      <mat-tab label="About & Reviews">
+        <div class="card-layout">
+          <!-- Doctor Bio Card -->
+          <div class="info-card">
+            <h3>Doctor Biography</h3>
+            <div class="tab-content">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>About the Doctor</mat-label>
+                <textarea matInput formControlName="about" rows="4" placeholder="With over 15 years of experience, Dr. Rao specializes in minimally invasive joint surgeries and has treated over 5,000 patients across all age groups."></textarea>
+                <mat-icon matSuffix>description</mat-icon>
+              </mat-form-field>
+            </div>
+          </div>
+          
+          <!-- Ratings Card -->
+          <div class="info-card">
+            <h3>Ratings & Reviews</h3>
+            <div class="tab-content">
+              <mat-form-field appearance="outline" class="half-width">
+                <mat-label>Average Rating</mat-label>
+                <input matInput type="number" formControlName="ratings" placeholder="4.9" min="0" max="5" step="0.1">
+                <mat-icon matSuffix>star_rate</mat-icon>
+              </mat-form-field>
+              
+              <mat-form-field appearance="outline" class="half-width">
+                <mat-label>Number of Reviews</mat-label>
+                <input matInput type="number" formControlName="reviewCount" placeholder="250">
+                <mat-icon matSuffix>reviews</mat-icon>
+              </mat-form-field>
+              
+              <mat-form-field appearance="outline" class="half-width">
+                <mat-label>External Ratings</mat-label>
+                <input matInput formControlName="externalRatings" placeholder="Practo: 4.8, Google: 4.7">
+                <mat-icon matSuffix>public</mat-icon>
+              </mat-form-field>
+              
+              <mat-form-field appearance="outline" class="half-width">
+                <mat-label>Academic Merit</mat-label>
+                <input matInput formControlName="academicMerit" placeholder="Gold Medalist, Research Excellence">
+                <mat-icon matSuffix>school</mat-icon>
+              </mat-form-field>
+            </div>
+          </div>
+          
+          <!-- Patient Comments Card -->
+          <div class="info-card">
+            <h3>Patient Testimonials</h3>
+            <div class="dynamic-list">
+              <div *ngFor="let ctrl of patientCommentsControls; let i = index" class="dynamic-list-item">
+                <mat-form-field appearance="outline" style="flex:1">
+                  <mat-label>Testimonial {{i+1}}</mat-label>
+                  <textarea matInput [formControl]="ctrl" placeholder="Helped my father walk again after a successful knee replacement." rows="2"></textarea>
+                  <mat-icon matSuffix>format_quote</mat-icon>
+                </mat-form-field>
+                <button mat-mini-fab color="primary" type="button" (click)="addItem(patientComments)" aria-label="Add testimonial">
+                  <mat-icon>add</mat-icon>
+                </button>
+                <button mat-mini-fab color="warn" type="button" (click)="removeItem(patientComments, i)" 
+                        [disabled]="patientComments.length === 1" aria-label="Remove testimonial">
+                  <mat-icon>remove</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+      
+      <!-- 6. Certifications & Background -->
+      <mat-tab label="Certifications & Background">
+        <div class="card-layout">
+          <!-- Certifications Card -->
+          <div class="info-card">
+            <h3>Professional Certifications</h3>
+            <div class="dynamic-list">
+              <div *ngFor="let ctrl of certificationsControls; let i = index" class="dynamic-list-item">
+                <mat-form-field appearance="outline" style="flex:1">
+                  <mat-label>Certification {{i+1}}</mat-label>
+                  <input matInput [formControl]="ctrl" placeholder="AO Trauma Certification – Switzerland">
+                  <mat-icon matSuffix>verified</mat-icon>
+                </mat-form-field>
+                <button mat-mini-fab color="primary" type="button" (click)="addItem(certifications)" aria-label="Add certification">
+                  <mat-icon>add</mat-icon>
+                </button>
+                <button mat-mini-fab color="warn" type="button" (click)="removeItem(certifications, i)" 
+                        [disabled]="certifications.length === 1" aria-label="Remove certification">
+                  <mat-icon>remove</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Affiliations Card -->
+          <div class="info-card">
+            <h3>Professional Affiliations</h3>
+            <div class="dynamic-list">
+              <div *ngFor="let ctrl of affiliationsControls; let i = index" class="dynamic-list-item">
+                <mat-form-field appearance="outline" style="flex:1">
+                  <mat-label>Affiliation {{i+1}}</mat-label>
+                  <input matInput [formControl]="ctrl" placeholder="Indian Orthopedic Association">
+                  <mat-icon matSuffix>groups</mat-icon>
+                </mat-form-field>
+                <button mat-mini-fab color="primary" type="button" (click)="addItem(affiliations)" aria-label="Add affiliation">
+                  <mat-icon>add</mat-icon>
+                </button>
+                <button mat-mini-fab color="warn" type="button" (click)="removeItem(affiliations, i)" 
+                        [disabled]="affiliations.length === 1" aria-label="Remove affiliation">
+                  <mat-icon>remove</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Publications Card -->
+          <div class="info-card">
+            <h3>Research Publications</h3>
+            <div class="dynamic-list">
+              <div *ngFor="let ctrl of publicationsControls; let i = index" class="dynamic-list-item">
+                <mat-form-field appearance="outline" style="flex:1">
+                  <mat-label>Publication {{i+1}}</mat-label>
+                  <input matInput [formControl]="ctrl" placeholder="Publications in Journal of Orthopaedic Research">
+                  <mat-icon matSuffix>article</mat-icon>
+                </mat-form-field>
+                <button mat-mini-fab color="primary" type="button" (click)="addItem(publications)" aria-label="Add publication">
+                  <mat-icon>add</mat-icon>
+                </button>
+                <button mat-mini-fab color="warn" type="button" (click)="removeItem(publications, i)" 
+                        [disabled]="publications.length === 1" aria-label="Remove publication">
+                  <mat-icon>remove</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Legacy Fields Card -->
+          <div class="info-card">
+            <h3>Additional Background Information</h3>
+            <div class="tab-content">
+              <!-- Education -->
+              <div class="dynamic-list">
+                <label><strong>Education</strong></label>
+                <div *ngFor="let ctrl of educationControls; let i = index" class="dynamic-list-item">
+                  <mat-form-field appearance="outline" style="flex:1">
+                    <mat-label>Education {{i+1}}</mat-label>
+                    <input matInput [formControl]="ctrl" placeholder="Degree, Institution, Year">
+                    <mat-icon matSuffix>school</mat-icon>
+                  </mat-form-field>
+                  <button mat-mini-fab color="primary" type="button" (click)="addItem(education)" aria-label="Add education">
+                    <mat-icon>add</mat-icon>
+                  </button>
+                  <button mat-mini-fab color="warn" type="button" (click)="removeItem(education, i)" 
+                          [disabled]="education.length === 1" aria-label="Remove education">
+                    <mat-icon>remove</mat-icon>
+                  </button>
+                </div>
+              </div>
+              
+              <!-- Experience Details -->
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Experience Details</mat-label>
+                <textarea matInput formControlName="experienceDetails" rows="3" placeholder="Detailed experience information"></textarea>
+                <mat-icon matSuffix>work</mat-icon>
+              </mat-form-field>
+            </div>
+          </div>
+          
+          <!-- Surgical History Card -->
+          <div class="info-card">
+            <h3>Surgical History</h3>
+            <div class="tab-content">
+              <!-- Previous Surgeries -->
+              <div class="dynamic-list">
+                <label><strong>Previous Surgeries</strong></label>
+                <div *ngFor="let ctrl of previousSurgeriesControls; let i = index" class="dynamic-list-item">
+                  <mat-form-field appearance="outline" style="flex:1">
+                    <mat-label>Surgery {{i+1}}</mat-label>
+                    <input matInput [formControl]="ctrl" placeholder="Surgery/Procedure">
+                    <mat-icon matSuffix>healing</mat-icon>
+                  </mat-form-field>
+                  <button mat-mini-fab color="primary" type="button" (click)="addItem(previousSurgeries)" aria-label="Add surgery">
+                    <mat-icon>add</mat-icon>
+                  </button>
+                  <button mat-mini-fab color="warn" type="button" (click)="removeItem(previousSurgeries, i)" 
+                          [disabled]="previousSurgeries.length === 1" aria-label="Remove surgery">
+                    <mat-icon>remove</mat-icon>
+                  </button>
+                </div>
+              </div>
+              
+              <!-- Surgeries in Past -->
+              <div class="dynamic-list">
+                <label><strong>Surgeries in the Past</strong></label>
+                <div *ngFor="let ctrl of surgeriesInPastControls; let i = index" class="dynamic-list-item">
+                  <mat-form-field appearance="outline" style="flex:1">
+                    <mat-label>Past Surgery {{i+1}}</mat-label>
+                    <input matInput [formControl]="ctrl" placeholder="Surgery/Procedure">
+                    <mat-icon matSuffix>history</mat-icon>
+                  </mat-form-field>
+                  <button mat-mini-fab color="primary" type="button" (click)="addItem(surgeriesInPast)" aria-label="Add past surgery">
+                    <mat-icon>add</mat-icon>
+                  </button>
+                  <button mat-mini-fab color="warn" type="button" (click)="removeItem(surgeriesInPast, i)" 
+                          [disabled]="surgeriesInPast.length === 1" aria-label="Remove past surgery">
+                    <mat-icon>remove</mat-icon>
+                  </button>
+                </div>
+              </div>
+              
+              <!-- Preferred Implants -->
+              <div class="dynamic-list">
+                <label><strong>Preferred Implants</strong></label>
+                <div *ngFor="let ctrl of preferredImplantsControls; let i = index" class="dynamic-list-item">
+                  <mat-form-field appearance="outline" style="flex:1">
+                    <mat-label>Implant {{i+1}}</mat-label>
+                    <input matInput [formControl]="ctrl" placeholder="Implant Name/Type">
+                    <mat-icon matSuffix>biotech</mat-icon>
+                  </mat-form-field>
+                  <button mat-mini-fab color="primary" type="button" (click)="addItem(preferredImplants)" aria-label="Add implant">
+                    <mat-icon>add</mat-icon>
+                  </button>
+                  <button mat-mini-fab color="warn" type="button" (click)="removeItem(preferredImplants, i)" 
+                          [disabled]="preferredImplants.length === 1" aria-label="Remove implant">
+                    <mat-icon>remove</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+    <div class="form-actions">
+      <button mat-raised-button color="primary" type="submit" [disabled]="isSubmitting">
+        <mat-icon>save</mat-icon> Save Doctor Profile
+      </button>
+      <button mat-stroked-button type="button" (click)="cancel()">
+        <mat-icon>cancel</mat-icon> Cancel
+      </button>
+    </div>
+  </form>
+</div>

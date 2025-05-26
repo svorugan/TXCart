@@ -1,0 +1,106 @@
+<div class="doctor-management">
+  <h2>Doctor Management</h2>
+
+  <!-- Search Bar -->
+  <form [formGroup]="searchForm" (ngSubmit)="searchDoctors()" class="search-bar">
+    <mat-form-field appearance="outline">
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name" placeholder="Doctor Name">
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Experience</mat-label>
+      <mat-select formControlName="experience">
+        <mat-option value="">Any</mat-option>
+        <mat-option value="5+ years post-fellowship">5+ years post-fellowship</mat-option>
+        <mat-option value="10+ years post-fellowship">10+ years post-fellowship</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Fellowship Type</mat-label>
+      <mat-select formControlName="fellowshipType">
+        <mat-option value="">Any</mat-option>
+        <mat-option value="National">National Fellowship</mat-option>
+        <mat-option value="International">International Fellowship</mat-option>
+        <mat-option value="Multiple">Multiple Fellowships</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Location Base</mat-label>
+      <mat-select formControlName="locationBase">
+        <mat-option value="">Any</mat-option>
+        <mat-option value="Local">Local (Hyderabad)</mat-option>
+        <mat-option value="Other Cities">Other Cities (India-wide)</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Availability</mat-label>
+      <mat-select formControlName="availability">
+        <mat-option value="">Any</mat-option>
+        <mat-option value="Next 3 days">Available next 3 days</mat-option>
+        <mat-option value="Weekend only">Weekend slots only</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Languages Spoken</mat-label>
+      <input matInput formControlName="languagesSpoken" placeholder="e.g. English, Hindi">
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Gender</mat-label>
+      <mat-select formControlName="gender">
+        <mat-option value="">Any</mat-option>
+        <mat-option value="Male">Male</mat-option>
+        <mat-option value="Female">Female</mat-option>
+        <mat-option value="No preference">No preference</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <button mat-raised-button color="primary" type="submit">Search</button>
+    <button mat-button type="button" (click)="resetSearch()">Reset</button>
+    <button mat-stroked-button color="accent" type="button" (click)="startAdd()">Add Doctor</button>
+  </form>
+
+  <!-- Doctor List -->
+  <table mat-table [dataSource]="filteredDoctors" class="mat-elevation-z8 doctor-table">
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Name</th>
+      <td mat-cell *matCellDef="let doctor">{{ doctor.name }}</td>
+    </ng-container>
+    <ng-container matColumnDef="experience">
+      <th mat-header-cell *matHeaderCellDef>Experience</th>
+      <td mat-cell *matCellDef="let doctor">{{ doctor.experience }}</td>
+    </ng-container>
+    <ng-container matColumnDef="fellowshipType">
+      <th mat-header-cell *matHeaderCellDef>Fellowship</th>
+      <td mat-cell *matCellDef="let doctor">{{ doctor.fellowshipType }}</td>
+    </ng-container>
+    <ng-container matColumnDef="locationBase">
+      <th mat-header-cell *matHeaderCellDef>Location</th>
+      <td mat-cell *matCellDef="let doctor">{{ doctor.locationBase }}</td>
+    </ng-container>
+    <ng-container matColumnDef="availability">
+      <th mat-header-cell *matHeaderCellDef>Availability</th>
+      <td mat-cell *matCellDef="let doctor">{{ doctor.availability }}</td>
+    </ng-container>
+    <ng-container matColumnDef="languagesSpoken">
+      <th mat-header-cell *matHeaderCellDef>Languages</th>
+      <td mat-cell *matCellDef="let doctor">{{ doctor.languagesSpoken.join(', ') }}</td>
+    </ng-container>
+    <ng-container matColumnDef="gender">
+      <th mat-header-cell *matHeaderCellDef>Gender</th>
+      <td mat-cell *matCellDef="let doctor">{{ doctor.gender }}</td>
+    </ng-container>
+    <ng-container matColumnDef="ratings">
+      <th mat-header-cell *matHeaderCellDef>Ratings</th>
+      <td mat-cell *matCellDef="let doctor">{{ doctor.ratings }}</td>
+    </ng-container>
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Actions</th>
+      <td mat-cell *matCellDef="let doctor">
+        <button mat-mini-button color="primary" (click)="startEdit(doctor)">Edit</button>
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="['name','experience','fellowshipType','locationBase','availability','languagesSpoken','gender','ratings','actions']"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['name','experience','fellowshipType','locationBase','availability','languagesSpoken','gender','ratings','actions'];"></tr>
+  </table>
+
+
+</div>

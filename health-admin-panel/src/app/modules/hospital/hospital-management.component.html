@@ -1,0 +1,148 @@
+<div class="hospital-management">
+  <h2>Hospital Management</h2>
+
+  <!-- Search Bar -->
+  <form [formGroup]="searchForm" (ngSubmit)="searchHospitals()" class="search-bar">
+    <mat-form-field appearance="outline">
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name" placeholder="Hospital Name">
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Location Base</mat-label>
+      <mat-select formControlName="locationBase">
+        <mat-option value="">Any</mat-option>
+        <mat-option value="Local">Local</mat-option>
+        <mat-option value="Other Cities">Other Cities</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Availability</mat-label>
+      <mat-select formControlName="availability">
+        <mat-option value="">Any</mat-option>
+        <mat-option value="Next 3 days">Next 3 days</mat-option>
+        <mat-option value="Weekend only">Weekend only</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Languages Spoken</mat-label>
+      <input matInput formControlName="languagesSpoken" placeholder="e.g. English, Hindi">
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Gender Preference</mat-label>
+      <mat-select formControlName="genderPreference">
+        <mat-option value="">Any</mat-option>
+        <mat-option value="Male">Male</mat-option>
+        <mat-option value="Female">Female</mat-option>
+        <mat-option value="No preference">No preference</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <button mat-raised-button color="primary" type="submit">Search</button>
+    <button mat-button type="button" (click)="resetSearch()">Reset</button>
+    <button mat-stroked-button color="accent" type="button" (click)="startAdd()">Add Hospital</button>
+  </form>
+
+  <!-- Hospital List -->
+  <table mat-table [dataSource]="filteredHospitals" class="mat-elevation-z8 hospital-table">
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Name</th>
+      <td mat-cell *matCellDef="let hospital">{{ hospital.name }}</td>
+    </ng-container>
+    <ng-container matColumnDef="locationBase">
+      <th mat-header-cell *matHeaderCellDef>Location Base</th>
+      <td mat-cell *matCellDef="let hospital">{{ hospital.locationBase }}</td>
+    </ng-container>
+    <ng-container matColumnDef="availability">
+      <th mat-header-cell *matHeaderCellDef>Availability</th>
+      <td mat-cell *matCellDef="let hospital">{{ hospital.availability }}</td>
+    </ng-container>
+    <ng-container matColumnDef="languagesSpoken">
+      <th mat-header-cell *matHeaderCellDef>Languages</th>
+      <td mat-cell *matCellDef="let hospital">{{ hospital.languagesSpoken.join(', ') }}</td>
+    </ng-container>
+    <ng-container matColumnDef="genderPreference">
+      <th mat-header-cell *matHeaderCellDef>Gender Preference</th>
+      <td mat-cell *matCellDef="let hospital">{{ hospital.genderPreference }}</td>
+    </ng-container>
+    <ng-container matColumnDef="ratings">
+      <th mat-header-cell *matHeaderCellDef>Ratings</th>
+      <td mat-cell *matCellDef="let hospital">{{ hospital.ratings }}</td>
+    </ng-container>
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Actions</th>
+      <td mat-cell *matCellDef="let hospital">
+        <button mat-mini-button color="primary" (click)="startEdit(hospital)">Edit</button>
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="['name','locationBase','availability','languagesSpoken','genderPreference','ratings','actions']"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['name','locationBase','availability','languagesSpoken','genderPreference','ratings','actions'];"></tr>
+  </table>
+
+  <!-- Add/Edit Hospital Form -->
+  <div *ngIf="showForm" class="hospital-form-container">
+    <form [formGroup]="hospitalForm" (ngSubmit)="saveHospital()" class="hospital-form">
+      <h3>{{ editingHospital ? 'Edit' : 'Add' }} Hospital</h3>
+      <mat-form-field appearance="outline">
+        <mat-label>Name</mat-label>
+        <input matInput formControlName="name" required>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Location Base</mat-label>
+        <mat-select formControlName="locationBase" required>
+          <mat-option value="Local">Local</mat-option>
+          <mat-option value="Other Cities">Other Cities</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Availability</mat-label>
+        <mat-select formControlName="availability" required>
+          <mat-option value="Next 3 days">Next 3 days</mat-option>
+          <mat-option value="Weekend only">Weekend only</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Languages Spoken</mat-label>
+        <input matInput formControlName="languagesSpoken" placeholder="Comma separated">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Gender Preference</mat-label>
+        <mat-select formControlName="genderPreference">
+          <mat-option value="Male">Male</mat-option>
+          <mat-option value="Female">Female</mat-option>
+          <mat-option value="No preference">No preference</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Ratings</mat-label>
+        <input matInput type="number" formControlName="ratings">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>External Ratings</mat-label>
+        <input matInput formControlName="externalRatings">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Academic Merit</mat-label>
+        <input matInput formControlName="academicMerit">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Fellowship Type</mat-label>
+        <input matInput formControlName="fellowshipType">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Experience</mat-label>
+        <input matInput formControlName="experience">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Surgery Volume</mat-label>
+        <input matInput type="number" formControlName="surgeryVolume">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Implant Preference</mat-label>
+        <input matInput formControlName="implantPreference">
+      </mat-form-field>
+      <div class="form-actions">
+        <button mat-raised-button color="primary" type="submit">Save</button>
+        <button mat-button type="button" (click)="cancelForm()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>

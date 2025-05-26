@@ -1,0 +1,44 @@
+.doctor-management {
+  padding: 24px;
+}
+
+.search-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.doctor-table {
+  width: 100%;
+  margin-bottom: 32px;
+}
+
+.doctor-form-container {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  padding: 24px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.doctor-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.doctor-form mat-form-field {
+  flex: 1 1 220px;
+  min-width: 180px;
+}
+
+.form-actions {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 16px;
+}
