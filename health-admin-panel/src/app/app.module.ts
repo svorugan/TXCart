@@ -41,6 +41,9 @@ import { ImplantsModule } from './modules/implants/implants.module';
 import { ImplantsManagementComponent } from './modules/implants/implants-management.component';
 import { DiagnosticsModule } from './modules/diagnostics/diagnostics.module';
 import { DiagnosticsManagementComponent } from './modules/diagnostics/diagnostics-management.component';
+import { PatientModule } from './modules/patient/patient.module';
+import { PatientViewModule } from './modules/patient/patient-view.module';
+import { PatientManagementComponent } from './modules/patient/patient-management.component';
 
 // Services
 import { PatientService } from './modules/patient/patient.service';
@@ -52,13 +55,13 @@ import { ImplantsService } from './modules/implants/implants.service';
 const routes: Routes = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
   { path: 'dashboard', component: DashboardComponent },
-  { path: 'patient-journey', component: PatientViewComponent },
   { path: 'hospitals', component: HospitalManagementComponent },
   { path: 'doctors/add', component: DoctorAddComponent },
   { path: 'doctors/edit/:id', component: DoctorAddComponent },
   { path: 'doctors', component: DoctorManagementComponent },
   { path: 'implants', component: ImplantsManagementComponent },
   { path: 'diagnostics', component: DiagnosticsManagementComponent },
+  { path: 'patients', component: PatientManagementComponent },
   { path: '**', redirectTo: '/dashboard' }
 ];
 
@@ -66,7 +69,6 @@ const routes: Routes = [
   declarations: [
     AppComponent,
     DashboardComponent,
-    PatientViewComponent,
     HospitalManagementComponent
   ],
   imports: [
@@ -79,6 +81,8 @@ const routes: Routes = [
     DoctorModule,
     ImplantsModule,
     DiagnosticsModule,
+    PatientModule,
+    PatientViewModule,
     // HospitalModule,
     // Angular Material
     MatToolbarModule,

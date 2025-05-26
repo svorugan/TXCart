@@ -1,0 +1,202 @@
+<h2 mat-dialog-title>{{ dialogTitle }}</h2>
+
+<form [formGroup]="patientForm" (ngSubmit)="onSubmit()">
+  <div mat-dialog-content>
+    <div class="form-section">
+      <h3>Basic Information</h3>
+      <div class="form-row two-columns">
+        <mat-form-field appearance="outline">
+          <mat-label>Full Name</mat-label>
+          <input matInput formControlName="name" placeholder="Enter patient name">
+          <mat-error *ngIf="patientForm.get('name')?.hasError('required')">
+            Name is required
+          </mat-error>
+        </mat-form-field>
+        
+        <mat-form-field appearance="outline">
+          <mat-label>Age</mat-label>
+          <input matInput type="number" formControlName="age" placeholder="Enter age">
+          <mat-error *ngIf="patientForm.get('age')?.hasError('required')">
+            Age is required
+          </mat-error>
+          <mat-error *ngIf="patientForm.get('age')?.hasError('min') || patientForm.get('age')?.hasError('max')">
+            Age must be between 0 and 120
+          </mat-error>
+        </mat-form-field>
+      </div>
+      
+      <div class="form-row two-columns">
+        <mat-form-field appearance="outline">
+          <mat-label>Gender</mat-label>
+          <mat-select formControlName="gender">
+            <mat-option *ngFor="let gender of genders" [value]="gender">
+              {{ gender }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="patientForm.get('gender')?.hasError('required')">
+            Gender is required
+          </mat-error>
+        </mat-form-field>
+        
+        <mat-form-field appearance="outline">
+          <mat-label>Blood Group</mat-label>
+          <mat-select formControlName="bloodGroup">
+            <mat-option value="">Not specified</mat-option>
+            <mat-option *ngFor="let group of bloodGroups" [value]="group">
+              {{ group }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+    
+    <div class="form-section">
+      <h3>Contact Information</h3>
+      <div class="form-row two-columns">
+        <mat-form-field appearance="outline">
+          <mat-label>Contact Number</mat-label>
+          <input matInput formControlName="contact" placeholder="Enter 10-digit mobile number">
+          <mat-error *ngIf="patientForm.get('contact')?.hasError('required')">
+            Contact number is required
+          </mat-error>
+          <mat-error *ngIf="patientForm.get('contact')?.hasError('pattern')">
+            Please enter a valid 10-digit number
+          </mat-error>
+        </mat-form-field>
+        
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="email" placeholder="Enter email address">
+          <mat-error *ngIf="patientForm.get('email')?.hasError('required')">
+            Email is required
+          </mat-error>
+          <mat-error *ngIf="patientForm.get('email')?.hasError('email')">
+            Please enter a valid email address
+          </mat-error>
+        </mat-form-field>
+      </div>
+      
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Address</mat-label>
+          <textarea matInput formControlName="address" placeholder="Enter full address" rows="2"></textarea>
+          <mat-error *ngIf="patientForm.get('address')?.hasError('required')">
+            Address is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+      
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Emergency Contact</mat-label>
+          <input matInput formControlName="emergencyContact" placeholder="Enter emergency contact number">
+        </mat-form-field>
+      </div>
+    </div>
+    
+    <div class="form-section">
+      <h3>Medical Information</h3>
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Medical History</mat-label>
+          <textarea matInput formControlName="medicalHistory" placeholder="Enter medical history" rows="3"></textarea>
+          <mat-error *ngIf="patientForm.get('medicalHistory')?.hasError('required')">
+            Medical history is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+      
+      <div class="form-row two-columns">
+        <mat-form-field appearance="outline">
+          <mat-label>Allergies</mat-label>
+          <textarea matInput formControlName="allergies" placeholder="Enter allergies if any" rows="2"></textarea>
+        </mat-form-field>
+        
+        <mat-form-field appearance="outline">
+          <mat-label>Current Medications</mat-label>
+          <textarea matInput formControlName="medications" placeholder="Enter current medications" rows="2"></textarea>
+        </mat-form-field>
+      </div>
+    </div>
+    
+    <div class="form-section">
+      <h3>Surgery Information</h3>
+      <div class="form-row two-columns">
+        <mat-form-field appearance="outline">
+          <mat-label>Surgery Type</mat-label>
+          <mat-select formControlName="surgeryType">
+            <mat-option value="">Not specified</mat-option>
+            <mat-option *ngFor="let type of surgeryTypes" [value]="type">
+              {{ type }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        
+        <mat-form-field appearance="outline">
+          <mat-label>Surgery Date</mat-label>
+          <input matInput [matDatepicker]="surgeryDatePicker" formControlName="surgeryDate">
+          <mat-datepicker-toggle matSuffix [for]="surgeryDatePicker"></mat-datepicker-toggle>
+          <mat-datepicker #surgeryDatePicker></mat-datepicker>
+        </mat-form-field>
+      </div>
+      
+      <div class="form-row two-columns">
+        <mat-form-field appearance="outline">
+          <mat-label>Surgeon</mat-label>
+          <input matInput formControlName="surgeon" placeholder="Enter surgeon name">
+        </mat-form-field>
+        
+        <mat-form-field appearance="outline">
+          <mat-label>Hospital</mat-label>
+          <input matInput formControlName="hospital" placeholder="Enter hospital name">
+        </mat-form-field>
+      </div>
+      
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Implant</mat-label>
+          <input matInput formControlName="implant" placeholder="Enter implant details if applicable">
+        </mat-form-field>
+      </div>
+    </div>
+    
+    <div class="form-section">
+      <h3>Insurance & Appointments</h3>
+      <div class="form-row two-columns">
+        <mat-form-field appearance="outline">
+          <mat-label>Insurance Provider</mat-label>
+          <input matInput formControlName="insuranceProvider" placeholder="Enter insurance provider">
+        </mat-form-field>
+        
+        <mat-form-field appearance="outline">
+          <mat-label>Insurance Number</mat-label>
+          <input matInput formControlName="insuranceNumber" placeholder="Enter insurance policy number">
+        </mat-form-field>
+      </div>
+      
+      <div class="form-row two-columns">
+        <mat-form-field appearance="outline">
+          <mat-label>Last Visit Date</mat-label>
+          <input matInput [matDatepicker]="lastVisitPicker" formControlName="lastVisitDate">
+          <mat-datepicker-toggle matSuffix [for]="lastVisitPicker"></mat-datepicker-toggle>
+          <mat-datepicker #lastVisitPicker></mat-datepicker>
+        </mat-form-field>
+        
+        <mat-form-field appearance="outline">
+          <mat-label>Next Appointment</mat-label>
+          <input matInput [matDatepicker]="nextAppointmentPicker" formControlName="nextAppointment">
+          <mat-datepicker-toggle matSuffix [for]="nextAppointmentPicker"></mat-datepicker-toggle>
+          <mat-datepicker #nextAppointmentPicker></mat-datepicker>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+  
+  <div mat-dialog-actions align="end">
+    <button mat-button type="button" (click)="onCancel()" *ngIf="!viewOnly">Cancel</button>
+    <button mat-button type="button" mat-dialog-close *ngIf="viewOnly">Close</button>
+    <button mat-raised-button color="primary" type="submit" [disabled]="patientForm.invalid" *ngIf="!viewOnly">
+      {{ isEdit ? 'Update' : 'Add' }}
+    </button>
+  </div>
+</form>

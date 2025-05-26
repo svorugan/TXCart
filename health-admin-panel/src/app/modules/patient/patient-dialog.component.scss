@@ -1,0 +1,52 @@
+.form-section {
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e0e0e0;
+  
+  &:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+  
+  h3 {
+    margin-top: 0;
+    margin-bottom: 16px;
+    color: #3f51b5;
+    font-size: 16px;
+    font-weight: 500;
+  }
+}
+
+.form-row {
+  margin-bottom: 16px;
+  
+  &.two-columns {
+    display: flex;
+    gap: 16px;
+    
+    mat-form-field {
+      flex: 1;
+    }
+  }
+  
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.full-width {
+  width: 100%;
+}
+
+mat-dialog-content {
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+@media (max-width: 600px) {
+  .form-row.two-columns {
+    flex-direction: column;
+    gap: 0;
+  }
+}
