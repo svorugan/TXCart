@@ -20,7 +20,7 @@ export interface DiagnosticTest {
   providedIn: 'root'
 })
 export class DiagnosticsService {
-  private apiUrl = 'http://localhost:3000/diagnostics';
+  private apiUrl = 'http://localhost:3000/api/diagnostics';
 
   constructor(private http: HttpClient) { }
 
@@ -50,6 +50,27 @@ export class DiagnosticsService {
     return this.http.get<DiagnosticTest[]>(`${this.apiUrl}?recommended=true`)
       .pipe(
         catchError(this.handleError<DiagnosticTest[]>('getRecommendedTests', []))
+      );
+  }
+
+  addDiagnosticTest(test: DiagnosticTest): Observable<DiagnosticTest> {
+    return this.http.post<DiagnosticTest>(this.apiUrl, test)
+      .pipe(
+        catchError(this.handleError<DiagnosticTest>('addDiagnosticTest'))
+      );
+  }
+
+  updateDiagnosticTest(id: string, test: DiagnosticTest): Observable<DiagnosticTest> {
+    return this.http.put<DiagnosticTest>(`${this.apiUrl}/${id}`, test)
+      .pipe(
+        catchError(this.handleError<DiagnosticTest>(`updateDiagnosticTest id=${id}`))
+      );
+  }
+
+  deleteDiagnosticTest(id: string): Observable<DiagnosticTest> {
+    return this.http.delete<DiagnosticTest>(`${this.apiUrl}/${id}`)
+      .pipe(
+        catchError(this.handleError<DiagnosticTest>(`deleteDiagnosticTest id=${id}`))
       );
   }
 

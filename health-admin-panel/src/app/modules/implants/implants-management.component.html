@@ -1,0 +1,167 @@
+<div class="implants-management">
+  <div class="header-container">
+    <h2>Orthopedic Implants Management</h2>
+    <button mat-raised-button color="primary" (click)="addImplant()">
+      <mat-icon>add</mat-icon> Add New Implant
+    </button>
+  </div>
+  
+  <!-- Origin Toggle -->
+  <div class="origin-toggle">
+    <mat-button-toggle-group>
+      <mat-button-toggle value="Indian" [checked]="true" (click)="toggleOrigin('Indian')">
+        Indian Manufacturers
+      </mat-button-toggle>
+      <mat-button-toggle value="Imported" (click)="toggleOrigin('Imported')">
+        Imported Products
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+
+  <!-- Search Bar -->
+  <form [formGroup]="searchForm" (ngSubmit)="searchImplants()" class="search-bar">
+    <mat-form-field appearance="outline">
+      <mat-label>Implant Name</mat-label>
+      <input matInput formControlName="name" placeholder="Search by name">
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+    
+    <mat-form-field appearance="outline">
+      <mat-label>Manufacturer</mat-label>
+      <mat-select formControlName="manufacturer">
+        <mat-option value="">Any</mat-option>
+        <ng-container *ngIf="searchForm.get('origin')?.value === 'Indian'">
+          <mat-option *ngFor="let manufacturer of indianManufacturers" [value]="manufacturer">
+            {{ manufacturer }}
+          </mat-option>
+        </ng-container>
+        <ng-container *ngIf="searchForm.get('origin')?.value === 'Imported'">
+          <mat-option *ngFor="let manufacturer of importedManufacturers" [value]="manufacturer">
+            {{ manufacturer }}
+          </mat-option>
+        </ng-container>
+      </mat-select>
+    </mat-form-field>
+    
+    <mat-form-field appearance="outline">
+      <mat-label>Tier</mat-label>
+      <mat-select formControlName="tier">
+        <mat-option value="">Any</mat-option>
+        <mat-option value="Economy">Economy</mat-option>
+        <mat-option value="Standard">Standard</mat-option>
+        <mat-option value="Premium">Premium</mat-option>
+      </mat-select>
+    </mat-form-field>
+    
+    <mat-form-field appearance="outline">
+      <mat-label>Surgery Type</mat-label>
+      <mat-select formControlName="surgeryType">
+        <mat-option value="">Any</mat-option>
+        <mat-option *ngFor="let surgery of surgeryTypes" [value]="surgery">
+          {{ surgery }}
+        </mat-option>
+      </mat-select>
+      <mat-hint>Based on available implants</mat-hint>
+    </mat-form-field>
+    
+    <mat-form-field appearance="outline">
+      <mat-label>Price Range</mat-label>
+      <mat-select formControlName="priceRange">
+        <mat-option value="">Any</mat-option>
+        <mat-option value="under25k">Under ₹25,000</mat-option>
+        <mat-option value="25k-50k">₹25,000 - ₹50,000</mat-option>
+        <mat-option value="50k-100k">₹50,000 - ₹1,00,000</mat-option>
+        <mat-option value="above100k">Above ₹1,00,000</mat-option>
+      </mat-select>
+    </mat-form-field>
+    
+    <div class="search-actions">
+      <button mat-raised-button color="primary" type="submit">
+        <mat-icon>search</mat-icon> Search
+      </button>
+      <button mat-button type="button" (click)="resetSearch()">
+        <mat-icon>clear</mat-icon> Reset
+      </button>
+    </div>
+  </form>
+
+  <!-- Implants Table -->
+  <div class="table-container mat-elevation-z8">
+    <table mat-table [dataSource]="filteredImplants" class="implants-table">
+      <!-- Name Column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Implant Name</th>
+        <td mat-cell *matCellDef="let implant">{{ implant.name }}</td>
+      </ng-container>
+      
+      <!-- Manufacturer Column -->
+      <ng-container matColumnDef="manufacturer">
+        <th mat-header-cell *matHeaderCellDef>Manufacturer</th>
+        <td mat-cell *matCellDef="let implant">{{ implant.manufacturer }}</td>
+      </ng-container>
+      
+      <!-- Origin Column -->
+      <ng-container matColumnDef="origin">
+        <th mat-header-cell *matHeaderCellDef>Origin</th>
+        <td mat-cell *matCellDef="let implant">
+          <span [ngClass]="{'indian': implant.origin === 'Indian', 'imported': implant.origin === 'Imported'}">
+            {{ implant.origin }}
+          </span>
+        </td>
+      </ng-container>
+      
+      <!-- Tier Column -->
+      <ng-container matColumnDef="tier">
+        <th mat-header-cell *matHeaderCellDef>Tier</th>
+        <td mat-cell *matCellDef="let implant">
+          <span class="tier-badge" [ngClass]="implant.tier.toLowerCase()">
+            {{ implant.tier }}
+          </span>
+        </td>
+      </ng-container>
+      
+      <!-- Price Column -->
+      <ng-container matColumnDef="price">
+        <th mat-header-cell *matHeaderCellDef>Price</th>
+        <td mat-cell *matCellDef="let implant">₹{{ implant.price | number }}</td>
+      </ng-container>
+      
+      <!-- Materials Column -->
+      <ng-container matColumnDef="materials">
+        <th mat-header-cell *matHeaderCellDef>Materials</th>
+        <td mat-cell *matCellDef="let implant">
+          <div class="materials-chips">
+            <span class="material-chip primary" *ngFor="let material of implant.materials | slice:0:2">
+              {{ material }}
+            </span>
+            <span class="material-chip accent" *ngIf="implant.materials.length > 2">
+              +{{ implant.materials.length - 2 }} more
+            </span>
+          </div>
+        </td>
+      </ng-container>
+      
+      <!-- Actions Column -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let implant">
+          <button mat-icon-button color="primary" (click)="viewImplantDetails(implant)" matTooltip="View Details">
+            <mat-icon>visibility</mat-icon>
+          </button>
+          <button mat-icon-button color="accent" (click)="editImplant(implant)" matTooltip="Edit Implant">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+      
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    
+    <!-- No results message -->
+    <div *ngIf="filteredImplants.length === 0" class="no-results">
+      <mat-icon>search_off</mat-icon>
+      <p>No implants found matching your criteria.</p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,109 @@
+<h2 mat-dialog-title>{{ dialogTitle }}</h2>
+
+<form [formGroup]="diagnosticForm" (ngSubmit)="onSubmit()">
+  <div mat-dialog-content>
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Test Name</mat-label>
+        <input matInput formControlName="name" placeholder="Enter diagnostic test name">
+        <mat-error *ngIf="diagnosticForm.get('name')?.hasError('required')">
+          Name is required
+        </mat-error>
+      </mat-form-field>
+    </div>
+    
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Description</mat-label>
+        <textarea matInput formControlName="description" placeholder="Enter test description" rows="3"></textarea>
+        <mat-error *ngIf="diagnosticForm.get('description')?.hasError('required')">
+          Description is required
+        </mat-error>
+      </mat-form-field>
+    </div>
+    
+    <div class="form-row two-columns">
+      <mat-form-field appearance="outline">
+        <mat-label>Category</mat-label>
+        <mat-select formControlName="category">
+          <mat-option *ngFor="let category of categories" [value]="category">
+            {{ category }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="diagnosticForm.get('category')?.hasError('required')">
+          Category is required
+        </mat-error>
+      </mat-form-field>
+      
+      <mat-form-field appearance="outline">
+        <mat-label>Price (₹)</mat-label>
+        <input matInput type="number" formControlName="price" placeholder="Enter price">
+        <span matPrefix>₹&nbsp;</span>
+        <mat-error *ngIf="diagnosticForm.get('price')?.hasError('required')">
+          Price is required
+        </mat-error>
+        <mat-error *ngIf="diagnosticForm.get('price')?.hasError('min')">
+          Price must be greater than 0
+        </mat-error>
+      </mat-form-field>
+    </div>
+    
+    <div class="form-row two-columns">
+      <mat-form-field appearance="outline">
+        <mat-label>Duration (minutes)</mat-label>
+        <input matInput type="number" formControlName="duration" placeholder="Enter duration in minutes">
+        <mat-error *ngIf="diagnosticForm.get('duration')?.hasError('required')">
+          Duration is required
+        </mat-error>
+        <mat-error *ngIf="diagnosticForm.get('duration')?.hasError('min')">
+          Duration must be at least 1 minute
+        </mat-error>
+      </mat-form-field>
+      
+      <mat-form-field appearance="outline">
+        <mat-label>Report Time (hours)</mat-label>
+        <input matInput type="number" formControlName="reportTime" placeholder="Enter report time in hours">
+        <mat-error *ngIf="diagnosticForm.get('reportTime')?.hasError('required')">
+          Report time is required
+        </mat-error>
+        <mat-error *ngIf="diagnosticForm.get('reportTime')?.hasError('min')">
+          Report time must be at least 1 hour
+        </mat-error>
+      </mat-form-field>
+    </div>
+    
+    <div class="form-row">
+      <div class="checkbox-container">
+        <mat-checkbox formControlName="preparationRequired">
+          Preparation Required
+        </mat-checkbox>
+      </div>
+    </div>
+    
+    <div class="form-row" *ngIf="diagnosticForm.get('preparationRequired')?.value">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Preparation Instructions</mat-label>
+        <textarea matInput formControlName="preparationInstructions" placeholder="Enter preparation instructions" rows="3"></textarea>
+        <mat-error *ngIf="diagnosticForm.get('preparationInstructions')?.hasError('required')">
+          Preparation instructions are required when preparation is required
+        </mat-error>
+      </mat-form-field>
+    </div>
+    
+    <div class="form-row">
+      <div class="checkbox-container">
+        <mat-checkbox formControlName="recommended">
+          Recommended Test
+        </mat-checkbox>
+      </div>
+    </div>
+  </div>
+  
+  <div mat-dialog-actions align="end">
+    <button mat-button type="button" (click)="onCancel()" *ngIf="!viewOnly">Cancel</button>
+    <button mat-button type="button" mat-dialog-close *ngIf="viewOnly">Close</button>
+    <button mat-raised-button color="primary" type="submit" [disabled]="diagnosticForm.invalid" *ngIf="!viewOnly">
+      {{ isEdit ? 'Update' : 'Add' }}
+    </button>
+  </div>
+</form>

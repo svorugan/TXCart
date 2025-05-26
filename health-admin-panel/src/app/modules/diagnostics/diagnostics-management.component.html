@@ -1,0 +1,131 @@
+<div class="diagnostics-management">
+  <div class="header-container">
+    <h2>Diagnostic Tests Management</h2>
+    <button mat-raised-button color="primary" (click)="addDiagnosticTest()">
+      <mat-icon>add</mat-icon> Add New Diagnostic Test
+    </button>
+  </div>
+  
+  <!-- Search Filters -->
+  <div class="search-filters">
+    <form [formGroup]="searchForm">
+      <div class="filters-row">
+        <mat-form-field appearance="outline">
+          <mat-label>Search by Name</mat-label>
+          <input matInput formControlName="name" placeholder="Enter test name">
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+        
+        <mat-form-field appearance="outline">
+          <mat-label>Category</mat-label>
+          <mat-select formControlName="category">
+            <mat-option value="">All Categories</mat-option>
+            <mat-option *ngFor="let category of categories" [value]="category">
+              {{ category }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        
+        <mat-form-field appearance="outline">
+          <mat-label>Recommended</mat-label>
+          <mat-select formControlName="recommended">
+            <mat-option value="">All</mat-option>
+            <mat-option value="true">Recommended</mat-option>
+            <mat-option value="false">Not Recommended</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      
+      <div class="filters-row">
+        <div class="price-range-filter">
+          <label>Price Range: {{ searchForm.get('priceRange')?.value[0] | currency:'INR' }} - {{ searchForm.get('priceRange')?.value[1] | currency:'INR' }}</label>
+          <mat-slider min="0" max="20000" step="500" class="price-slider">
+            <input matSliderStartThumb formControlName="priceRange" [value]="searchForm.get('priceRange')?.value[0]">
+            <input matSliderEndThumb formControlName="priceRange" [value]="searchForm.get('priceRange')?.value[1]">
+          </mat-slider>
+        </div>
+        
+        <button mat-button color="warn" (click)="resetFilters()">
+          <mat-icon>refresh</mat-icon> Reset Filters
+        </button>
+      </div>
+    </form>
+  </div>
+  
+  <!-- Results Count -->
+  <div class="results-count">
+    <span>Showing {{ filteredTests.length }} of {{ diagnosticTests.length }} diagnostic tests</span>
+  </div>
+  
+  <!-- Diagnostic Tests Table -->
+  <div class="table-container mat-elevation-z2">
+    <table mat-table [dataSource]="filteredTests" class="diagnostic-tests-table">
+      <!-- Name Column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Test Name</th>
+        <td mat-cell *matCellDef="let test">
+          <div class="test-name">{{ test.name }}</div>
+          <div class="test-description">{{ test.description }}</div>
+        </td>
+      </ng-container>
+      
+      <!-- Category Column -->
+      <ng-container matColumnDef="category">
+        <th mat-header-cell *matHeaderCellDef>Category</th>
+        <td mat-cell *matCellDef="let test">
+          <span class="category-chip">{{ test.category }}</span>
+        </td>
+      </ng-container>
+      
+      <!-- Price Column -->
+      <ng-container matColumnDef="price">
+        <th mat-header-cell *matHeaderCellDef>Price</th>
+        <td mat-cell *matCellDef="let test">{{ test.price | currency:'INR' }}</td>
+      </ng-container>
+      
+      <!-- Duration Column -->
+      <ng-container matColumnDef="duration">
+        <th mat-header-cell *matHeaderCellDef>Duration</th>
+        <td mat-cell *matCellDef="let test">{{ formatDuration(test.duration) }}</td>
+      </ng-container>
+      
+      <!-- Report Time Column -->
+      <ng-container matColumnDef="reportTime">
+        <th mat-header-cell *matHeaderCellDef>Report Time</th>
+        <td mat-cell *matCellDef="let test">{{ formatReportTime(test.reportTime) }}</td>
+      </ng-container>
+      
+      <!-- Recommended Column -->
+      <ng-container matColumnDef="recommended">
+        <th mat-header-cell *matHeaderCellDef>Recommended</th>
+        <td mat-cell *matCellDef="let test">
+          <mat-icon *ngIf="test.recommended" color="primary" matTooltip="Recommended Test">check_circle</mat-icon>
+          <mat-icon *ngIf="!test.recommended" color="warn" matTooltip="Not Recommended">cancel</mat-icon>
+        </td>
+      </ng-container>
+      
+      <!-- Actions Column -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let test">
+          <button mat-icon-button color="primary" (click)="viewDiagnosticTestDetails(test)" matTooltip="View Details">
+            <mat-icon>visibility</mat-icon>
+          </button>
+          <button mat-icon-button color="accent" (click)="editDiagnosticTest(test)" matTooltip="Edit Test">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+      
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      
+      <!-- No Results Row -->
+      <tr class="no-results-row" *matNoDataRow>
+        <td [attr.colspan]="displayedColumns.length" class="no-results-cell">
+          No diagnostic tests found matching the search criteria.
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>

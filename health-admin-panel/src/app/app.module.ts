@@ -27,6 +27,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatTableModule } from '@angular/material/table';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 // Components
 import { AppComponent } from './app.component';
@@ -36,6 +37,10 @@ import { DoctorManagementComponent } from './modules/doctor/doctor-management.co
 import { DoctorAddComponent } from './modules/doctor/doctor-add.component';
 import { DoctorModule } from './modules/doctor/doctor.module';
 import { HospitalManagementComponent } from './modules/hospital/hospital-management.component';
+import { ImplantsModule } from './modules/implants/implants.module';
+import { ImplantsManagementComponent } from './modules/implants/implants-management.component';
+import { DiagnosticsModule } from './modules/diagnostics/diagnostics.module';
+import { DiagnosticsManagementComponent } from './modules/diagnostics/diagnostics-management.component';
 
 // Services
 import { PatientService } from './modules/patient/patient.service';
@@ -52,6 +57,8 @@ const routes: Routes = [
   { path: 'doctors/add', component: DoctorAddComponent },
   { path: 'doctors/edit/:id', component: DoctorAddComponent },
   { path: 'doctors', component: DoctorManagementComponent },
+  { path: 'implants', component: ImplantsManagementComponent },
+  { path: 'diagnostics', component: DiagnosticsManagementComponent },
   { path: '**', redirectTo: '/dashboard' }
 ];
 
@@ -70,6 +77,8 @@ const routes: Routes = [
     ReactiveFormsModule,
     RouterModule.forRoot(routes),
     DoctorModule,
+    ImplantsModule,
+    DiagnosticsModule,
     // HospitalModule,
     // Angular Material
     MatToolbarModule,
@@ -92,7 +101,8 @@ const routes: Routes = [
     MatProgressBarModule,
     MatChipsModule,
     MatBadgeModule,
-    MatTableModule
+    MatTableModule,
+    MatSnackBarModule
   ],
   providers: [
     PatientService,
