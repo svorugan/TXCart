@@ -1,0 +1,24 @@
+<header class="dashboard-header">
+  <div class="header-title">TXcart Admin Dashboard</div>
+  <button class="logout-btn" (click)="onLogout()">Logout</button>
+</header>
+<div class="dashboard-container">
+  <aside class="sidebar">
+    <nav>
+      <ul>
+        <li><a routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a></li>
+        <li><a routerLink="/patient-journey" routerLinkActive="active">Patient Journey</a></li>
+        <li><a routerLink="/doctors" routerLinkActive="active">Manage Doctors</a></li>
+        <li><a routerLink="/hospitals" routerLinkActive="active">Manage Hospitals</a></li>
+        <li><a routerLink="/diagnostics" routerLinkActive="active">Manage Diagnostics Centers</a></li>
+        <li><a routerLink="/implants" routerLinkActive="active">Manage Implants</a></li>
+      </ul>
+    </nav>
+  </aside>
+  <main class="main-content">
+    <router-outlet></router-outlet>
+  </main>
+</div>
+<footer class="dashboard-footer">
+  <span>&copy; {{ currentYear }} TXcart. All rights reserved.</span>
+</footer>

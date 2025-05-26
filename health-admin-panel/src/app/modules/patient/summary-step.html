@@ -1,0 +1,84 @@
+  <!-- Step 5: Summary -->
+  <mat-step label="Summary">
+    <div class="step-header">
+      <button mat-icon-button matStepperPrevious>
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <h2>Journey Summary</h2>
+    </div>
+    
+    <!-- Journey Summary Cards -->
+    <div class="journey-summary">
+      <div class="summary-card">
+        <div class="summary-card-header">
+          <h3>Surgery Type</h3>
+        </div>
+        <div class="summary-card-content">
+          <p>{{ step1Selection === 'left-tkr' ? 'Total Knee Replacement (Left)' : 
+              step1Selection === 'right-tkr' ? 'Total Knee Replacement (Right)' : 
+              step1Selection === 'partial-left' ? 'Partial Knee Replacement (Left)' : 'Not selected' }}</p>
+        </div>
+      </div>
+      
+      <div class="summary-card">
+        <div class="summary-card-header">
+          <h3>Surgeon</h3>
+        </div>
+        <div class="summary-card-content">
+          <p>{{ step2Surgeon || 'Not selected' }}</p>
+        </div>
+      </div>
+      
+      <div class="summary-card">
+        <div class="summary-card-header">
+          <h3>Implant</h3>
+        </div>
+        <div class="summary-card-content">
+          <p>{{ step3Implant || 'Not selected' }}</p>
+        </div>
+      </div>
+      
+      <div class="summary-card">
+        <div class="summary-card-header">
+          <h3>Hospital Zone</h3>
+        </div>
+        <div class="summary-card-content">
+          <p>{{ step4Zone || 'Not selected' }}</p>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Cost Estimate -->
+    <div class="estimate-container">
+      <div *ngIf="step2Surgeon" class="surgeon-name">{{ step2Surgeon }}</div>
+      
+      <div class="cost">
+        <h2>₹ {{ estimate | number }}</h2>
+      </div>
+      
+      <div class="cost-breakdown">
+        <h3>Includes:</h3>
+        <ul>
+          <li>2 days hospital stay</li>
+          <li>1 night in ICU</li>
+          <li>Surgeon's fee</li>
+          <li>Anaesthetist</li>
+          <li>Medicines</li>
+          <li>Disposables</li>
+        </ul>
+        
+        <p class="disclaimer">*For standard surgery only. Additional costs may apply if complications require extra treatment.</p>
+      </div>
+    </div>
+    
+    <div class="action-buttons">
+      <button mat-stroked-button color="primary" matStepperPrevious>
+        <mat-icon>arrow_back</mat-icon>
+        <span>Back</span>
+      </button>
+      <button mat-raised-button color="accent" (click)="bookAppointment()">
+        <mat-icon>calendar_today</mat-icon>
+        <span>Book Appointment</span>
+      </button>
+    </div>
+  </mat-step>

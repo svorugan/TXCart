@@ -1,0 +1,455 @@
+<div class="patient-journey-container">
+  <!-- Page Header -->
+  <div class="journey-header">
+    <h1>Patient Journey</h1>
+    <div class="user-info" *ngIf="userName">
+      <mat-icon>person</mat-icon>
+      <span>{{ userName }}</span>
+    </div>
+    <button mat-icon-button class="filter-toggle" (click)="toggleFilterSidebar()">
+      <mat-icon>{{ showFilterSidebar ? 'close' : 'filter_list' }}</mat-icon>
+    </button>
+  </div>
+
+  <div class="journey-layout">
+    <!-- Overlay for mobile -->
+    <div class="filter-sidebar-overlay" [class.active]="showFilterSidebar" (click)="toggleFilterSidebar()"></div>
+    
+    <!-- Filter Sidebar -->
+    <div class="filter-sidebar" [class.active]="showFilterSidebar">
+      <div class="sidebar-header">
+        <h2>Filter Surgeons</h2>
+      </div>
+      
+      <div class="filter-content">
+        <!-- Experience Filters -->
+        <div class="filter-group">
+          <h3>Experience</h3>
+          <mat-form-field appearance="outline" class="filter-field">
+            <mat-label>Minimum Experience</mat-label>
+            <mat-select [(ngModel)]="filters.minExperience" (selectionChange)="applyFilters()">
+              <mat-option [value]="null">Any</mat-option>
+              <mat-option [value]="5">5+ years</mat-option>
+              <mat-option [value]="10">10+ years</mat-option>
+              <mat-option [value]="15">15+ years</mat-option>
+              <mat-option [value]="20">20+ years</mat-option>
+            </mat-select>
+          </mat-form-field>
+          
+          <mat-form-field appearance="outline" class="filter-field">
+            <mat-label>Fellowship Type</mat-label>
+            <mat-select [(ngModel)]="filters.fellowshipType" (selectionChange)="applyFilters()">
+              <mat-option [value]="null">Any</mat-option>
+              <mat-option value="International">International</mat-option>
+              <mat-option value="National">National</mat-option>
+              <mat-option value="None">None</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        
+        <!-- Location Filters -->
+        <div class="filter-group">
+          <h3>Location</h3>
+          <mat-form-field appearance="outline" class="filter-field">
+            <mat-label>City</mat-label>
+            <mat-select [(ngModel)]="filters.city" (selectionChange)="applyFilters()">
+              <mat-option [value]="null">Any</mat-option>
+              <mat-option *ngFor="let city of cities" [value]="city">{{ city }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          
+          <div class="checkbox-filters">
+            <mat-checkbox [(ngModel)]="filters.isLocal" (change)="applyFilters()">Local Doctor</mat-checkbox>
+            <mat-checkbox [(ngModel)]="filters.isVisiting" (change)="applyFilters()">Visiting Doctor</mat-checkbox>
+          </div>
+        </div>
+        
+        <!-- Availability Filters -->
+        <div class="filter-group">
+          <h3>Availability</h3>
+          <mat-form-field appearance="outline" class="filter-field">
+            <mat-label>Available Within</mat-label>
+            <mat-select [(ngModel)]="filters.availableNextDays" (selectionChange)="applyFilters()">
+              <mat-option [value]="null">Any</mat-option>
+              <mat-option [value]="7">7 days</mat-option>
+              <mat-option [value]="14">14 days</mat-option>
+              <mat-option [value]="30">30 days</mat-option>
+            </mat-select>
+          </mat-form-field>
+          
+          <div class="checkbox-filters">
+            <mat-checkbox [(ngModel)]="filters.hasWeekendSlots" (change)="applyFilters()">Weekend Slots</mat-checkbox>
+          </div>
+        </div>
+        
+        <!-- Surgery & Implants Filters -->
+        <div class="filter-group">
+          <h3>Surgery & Implants</h3>
+          <mat-form-field appearance="outline" class="filter-field">
+            <mat-label>Minimum Surgery Count</mat-label>
+            <mat-select [(ngModel)]="filters.minSurgeryCount" (selectionChange)="applyFilters()">
+              <mat-option [value]="null">Any</mat-option>
+              <mat-option [value]="50">50+</mat-option>
+              <mat-option [value]="100">100+</mat-option>
+              <mat-option [value]="200">200+</mat-option>
+              <mat-option [value]="500">500+</mat-option>
+            </mat-select>
+          </mat-form-field>
+          
+          <div class="checkbox-filters">
+            <mat-checkbox [(ngModel)]="filters.offersIndianImplants" (change)="applyFilters()">Indian Implants</mat-checkbox>
+            <mat-checkbox [(ngModel)]="filters.offersImportedImplants" (change)="applyFilters()">Imported Implants</mat-checkbox>
+          </div>
+        </div>
+        
+        <!-- Ratings & Academic Filters -->
+        <div class="filter-group">
+          <h3>Ratings & Academic</h3>
+          <mat-form-field appearance="outline" class="filter-field">
+            <mat-label>Minimum Rating</mat-label>
+            <mat-select [(ngModel)]="filters.minRating" (selectionChange)="applyFilters()">
+              <mat-option [value]="null">Any</mat-option>
+              <mat-option [value]="3">3+ stars</mat-option>
+              <mat-option [value]="4">4+ stars</mat-option>
+              <mat-option [value]="4.5">4.5+ stars</mat-option>
+            </mat-select>
+          </mat-form-field>
+          
+          <mat-form-field appearance="outline" class="filter-field">
+            <mat-label>Languages Spoken</mat-label>
+            <mat-select [(ngModel)]="filters.languages" (selectionChange)="applyFilters()" multiple>
+              <mat-option *ngFor="let language of languages" [value]="language">{{ language }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        
+        <!-- Active Filters -->
+        <div class="active-filters" *ngIf="hasActiveFilters()">
+          <h3>Active Filters</h3>
+          <mat-chip-set>
+            <mat-chip *ngIf="filters.minExperience" (removed)="clearFilter('minExperience')">
+              {{ filters.minExperience }}+ years experience
+              <mat-icon matChipRemove>cancel</mat-icon>
+            </mat-chip>
+            <mat-chip *ngIf="filters.fellowshipType" (removed)="clearFilter('fellowshipType')">
+              {{ filters.fellowshipType }} fellowship
+              <mat-icon matChipRemove>cancel</mat-icon>
+            </mat-chip>
+            <!-- Add more chips for other active filters -->
+          </mat-chip-set>
+          
+          <button mat-stroked-button color="warn" (click)="clearAllFilters()" class="clear-all-btn">
+            <mat-icon>clear_all</mat-icon> Clear All
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+      <mat-horizontal-stepper linear #stepper class="journey-stepper">
+        <!-- Step 1: Select Surgery Type -->
+        <mat-step label="Select Surgery Type">
+          <div class="step-header">
+            <h2>Select Surgery Type</h2>
+          </div>
+          <div class="surgery-options">
+            <mat-card class="option-card" (click)="step1Selection = 'left-tkr'" [ngClass]="{'selected': step1Selection === 'left-tkr'}">
+              <h3>Total Knee Replacement (Left)</h3>
+              <p class="availability">package available</p>
+            </mat-card>
+
+            <mat-card class="option-card" (click)="step1Selection = 'right-tkr'" [ngClass]="{'selected': step1Selection === 'right-tkr'}">
+              <h3>Total Knee Replacement (Right)</h3>
+              <p class="availability">package available</p>
+            </mat-card>
+
+            <mat-card class="option-card" (click)="step1Selection = 'partial-left'" [ngClass]="{'selected': step1Selection === 'partial-left'}">
+              <h3>Partial Knee Replacement (Left)</h3>
+              <p class="availability">package available</p>
+            </mat-card>
+          </div>
+          <div class="action-buttons">
+            <div></div> <!-- Empty div for flex spacing -->
+            <button mat-raised-button color="primary" matStepperNext [disabled]="!step1Selection">
+              <span>Continue</span>
+              <mat-icon>arrow_forward</mat-icon>
+            </button>
+          </div>
+        </mat-step>
+
+        <!-- Step 2: Select Doctor -->
+        <mat-step label="Select Surgeon">
+          <div class="step-header">
+            <button mat-icon-button matStepperPrevious>
+              <mat-icon>arrow_back</mat-icon>
+            </button>
+            <h2>Select Surgeon</h2>
+          </div>
+          
+          <div class="results-container">
+            <div class="results-header">
+              <h3>Available Surgeons <span class="count-badge">{{ filteredSurgeons.length }}</span></h3>
+              <div class="active-filter-pills" *ngIf="hasActiveFilters()">
+                <span class="filter-count">{{ getActiveFilterCount() }} active filters</span>
+                <button mat-button color="accent" (click)="toggleFilterSidebar()" class="view-filters-btn">
+                  <mat-icon>filter_list</mat-icon> View Filters
+                </button>
+              </div>
+            </div>
+            
+            <div class="surgeon-cards">
+              <mat-card *ngFor="let surgeon of filteredSurgeons" class="surgeon-card" [class.selected]="step2Surgeon === surgeon.name" (click)="selectSurgeon(surgeon.name)">
+                <div class="surgeon-header">
+                  <div class="surgeon-avatar">
+                    <img [src]="surgeon.avatar || 'assets/images/default-avatar.jpg'" alt="{{ surgeon.name }}">
+                  </div>
+                  <div class="surgeon-info">
+                    <h3>{{ surgeon.name }}</h3>
+                    <div class="surgeon-specialties">
+                      <span class="specialty-tag">{{ surgeon.specialty }}</span>
+                      <span class="experience-tag">{{ surgeon.experience }} years</span>
+                    </div>
+                    <div class="surgeon-rating">
+                      <mat-icon class="star-icon">star</mat-icon>
+                      <span>{{ surgeon.rating }}</span>
+                      <span class="review-count">({{ surgeon.reviewCount }})</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="surgeon-details">
+                  <div class="detail-item">
+                    <mat-icon>local_hospital</mat-icon>
+                    <span>{{ surgeon.hospital }}</span>
+                  </div>
+                  <div class="detail-item">
+                    <mat-icon>event_available</mat-icon>
+                    <span>Available in {{ surgeon.availableIn }} days</span>
+                  </div>
+                  <div class="detail-item">
+                    <mat-icon>medical_services</mat-icon>
+                    <span>{{ surgeon.surgeryCount }}+ surgeries</span>
+                  </div>
+                  <div class="detail-item">
+                    <mat-icon>school</mat-icon>
+                    <span>{{ surgeon.qualification }}</span>
+                  </div>
+                </div>
+                
+                <div class="surgeon-badges">
+                  <span class="badge" *ngIf="surgeon.isLocal">Local</span>
+                  <span class="badge" *ngIf="surgeon.hasWeekendSlots">Weekend Slots</span>
+                  <span class="badge" *ngIf="surgeon.fellowshipType === 'International'">Int'l Fellowship</span>
+                </div>
+              </mat-card>
+            </div>
+          </div>
+          
+          <div class="action-buttons">
+            <button mat-stroked-button color="primary" matStepperPrevious>
+              <mat-icon>arrow_back</mat-icon>
+              <span>Back</span>
+            </button>
+            <button mat-raised-button color="primary" matStepperNext [disabled]="!step2Surgeon">
+              <span>Continue</span>
+              <mat-icon>arrow_forward</mat-icon>
+            </button>
+          </div>
+        </mat-step>
+
+        <!-- Step 3: Select Implant -->
+        <mat-step label="Select Implant">
+          <div class="step-header">
+            <button mat-icon-button matStepperPrevious>
+              <mat-icon>arrow_back</mat-icon>
+            </button>
+            <h2>Select Implant</h2>
+          </div>
+          
+          <div class="implant-options">
+            <mat-card class="implant-card" [class.selected]="step3Implant === 'Standard'" (click)="selectImplant('Standard')">
+              <div class="implant-header">
+                <h3>Standard</h3>
+                <span class="price-tag">₹80,000</span>
+              </div>
+              <div class="implant-content">
+                <div class="implant-image-container">
+                  <img src="assets/images/implant-standard.jpg" alt="Standard Implant" class="implant-image">
+                </div>
+                <div class="implant-details">
+                  <p class="implant-description">High-quality Indian implant with excellent durability and performance.</p>
+                  <ul class="implant-features">
+                    <li><mat-icon>check</mat-icon> Made in India</li>
+                    <li><mat-icon>check</mat-icon> 15-year warranty</li>
+                    <li><mat-icon>check</mat-icon> Good mobility</li>
+                    <li><mat-icon>check</mat-icon> Proven track record</li>
+                  </ul>
+                </div>
+              </div>
+            </mat-card>
+            
+            <mat-card class="implant-card" [class.selected]="step3Implant === 'Premium'" (click)="selectImplant('Premium')">
+              <div class="implant-header">
+                <h3>Premium</h3>
+                <span class="price-tag">₹120,000</span>
+              </div>
+              <div class="implant-content">
+                <div class="implant-image-container">
+                  <img src="assets/images/implant-premium.jpg" alt="Premium Implant" class="implant-image">
+                </div>
+                <div class="implant-details">
+                  <p class="implant-description">Top-of-the-line imported implant with maximum longevity and performance.</p>
+                  <ul class="implant-features">
+                    <li><mat-icon>check</mat-icon> Imported from USA/Europe</li>
+                    <li><mat-icon>check</mat-icon> Lifetime warranty</li>
+                    <li><mat-icon>check</mat-icon> Premium materials</li>
+                    <li><mat-icon>check</mat-icon> Maximum flexibility</li>
+                    <li><mat-icon>check</mat-icon> Advanced wear resistance</li>
+                  </ul>
+                </div>
+              </div>
+            </mat-card>
+          </div>
+          
+          <div class="action-buttons">
+            <button mat-stroked-button color="primary" matStepperPrevious>
+              <mat-icon>arrow_back</mat-icon>
+              <span>Back</span>
+            </button>
+            <button mat-raised-button color="primary" matStepperNext [disabled]="!step3Implant">
+              <span>Continue</span>
+              <mat-icon>arrow_forward</mat-icon>
+            </button>
+          </div>
+        </mat-step>
+
+        <!-- Step 4: Select Hospital Zone with Map -->
+        <mat-step label="Select Hospital Zone">
+          <div class="step-header">
+            <button mat-icon-button matStepperPrevious>
+              <mat-icon>arrow_back</mat-icon>
+            </button>
+            <h2>Select Hospital Zone</h2>
+          </div>
+          
+          <div class="zone-selection-container">
+            <div class="zone-info">
+              <h3>Select a hospital zone near you</h3>
+              <p>Choose a zone based on your location for convenient access to hospital facilities.</p>
+            </div>
+            
+            <div class="map-container">
+              <!-- Map will be rendered here by the component -->
+              <div id="map" style="height: 300px; width: 100%; border-radius: 8px;"></div>
+            </div>
+            
+            <div *ngIf="selectedZone" class="selected-zone-info">
+              <mat-icon>location_on</mat-icon>
+              <div>
+                <strong>{{ selectedZone.name }} selected</strong>
+                <p>{{ selectedZone.description }}</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="action-buttons">
+            <button mat-stroked-button color="primary" matStepperPrevious>
+              <mat-icon>arrow_back</mat-icon>
+              <span>Back</span>
+            </button>
+            <button mat-raised-button color="primary" matStepperNext [disabled]="!step4Zone">
+              <span>Continue</span>
+              <mat-icon>arrow_forward</mat-icon>
+            </button>
+          </div>
+        </mat-step>
+
+        <!-- Step 5: Summary -->
+        <mat-step label="Summary">
+          <div class="step-header">
+            <button mat-icon-button matStepperPrevious>
+              <mat-icon>arrow_back</mat-icon>
+            </button>
+            <h2>Journey Summary</h2>
+          </div>
+          
+          <!-- Journey Summary Cards -->
+          <div class="journey-summary">
+            <div class="summary-card">
+              <div class="summary-card-header">
+                <h3>Surgery Type</h3>
+              </div>
+              <div class="summary-card-content">
+                <p>{{ step1Selection === 'left-tkr' ? 'Total Knee Replacement (Left)' : 
+                    step1Selection === 'right-tkr' ? 'Total Knee Replacement (Right)' : 
+                    step1Selection === 'partial-left' ? 'Partial Knee Replacement (Left)' : 'Not selected' }}</p>
+              </div>
+            </div>
+            
+            <div class="summary-card">
+              <div class="summary-card-header">
+                <h3>Surgeon</h3>
+              </div>
+              <div class="summary-card-content">
+                <p>{{ step2Surgeon || 'Not selected' }}</p>
+              </div>
+            </div>
+            
+            <div class="summary-card">
+              <div class="summary-card-header">
+                <h3>Implant</h3>
+              </div>
+              <div class="summary-card-content">
+                <p>{{ step3Implant || 'Not selected' }}</p>
+              </div>
+            </div>
+            
+            <div class="summary-card">
+              <div class="summary-card-header">
+                <h3>Hospital Zone</h3>
+              </div>
+              <div class="summary-card-content">
+                <p>{{ step4Zone || 'Not selected' }}</p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Cost Estimate -->
+          <div class="estimate-container">
+            <div *ngIf="step2Surgeon" class="surgeon-name">{{ step2Surgeon }}</div>
+            
+            <div class="cost">
+              <h2>₹ {{ estimate | number }}</h2>
+            </div>
+            
+            <div class="cost-breakdown">
+              <h3>Includes:</h3>
+              <ul>
+                <li>2 days hospital stay</li>
+                <li>1 night in ICU</li>
+                <li>Surgeon's fee</li>
+                <li>Anaesthetist</li>
+                <li>Medicines</li>
+                <li>Disposables</li>
+              </ul>
+              
+              <p class="disclaimer">*For standard surgery only. Additional costs may apply if complications require extra treatment.</p>
+            </div>
+          </div>
+          
+          <div class="action-buttons">
+            <button mat-stroked-button color="primary" matStepperPrevious>
+              <mat-icon>arrow_back</mat-icon>
+              <span>Back</span>
+            </button>
+            <button mat-raised-button color="accent" (click)="bookAppointment()">
+              <mat-icon>calendar_today</mat-icon>
+              <span>Book Appointment</span>
+            </button>
+          </div>
+        </mat-step>
+      </mat-horizontal-stepper>
+    </div>
+  </div>
+</div>
