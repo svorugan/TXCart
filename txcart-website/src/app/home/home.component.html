@@ -1,0 +1,168 @@
+<div class="modern-home-container">
+  <!-- Modern Hero Section with Integrated Patient Journey -->
+  <section class="modern-hero">
+    <div class="hero-overlay">
+      <div class="hero-content">
+        <h1>Your Healthcare Journey Starts Here</h1>
+        <p class="hero-subtitle">TXCart guides you through selecting the right surgery, surgeon, implant, and hospital for your orthopedic needs</p>
+        
+        <div class="journey-tabs">
+          <button 
+            [class.active]="!showJourney" 
+            (click)="showJourney = false"
+            class="tab-button">
+            <span class="tab-icon"><mat-icon>home</mat-icon></span> Home
+          </button>
+          <button 
+            [class.active]="showJourney" 
+            (click)="showJourney = true"
+            class="tab-button">
+            <span class="tab-icon"><mat-icon>search</mat-icon></span> Start Journey
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Main Content Container -->
+  <div class="main-content">
+    <!-- Patient Journey Section (Conditionally Shown) -->
+    <section *ngIf="showJourney" class="journey-container">
+      <div class="journey-header">
+        <h2>Find Your Perfect Healthcare Match</h2>
+        <p>Answer a few questions to help us guide you to the right surgery, surgeon, implant, and hospital for your needs</p>
+      </div>
+      <app-patient-journey></app-patient-journey>
+    </section>
+    
+    <!-- Home Content (Shown when journey is hidden) -->
+    <section *ngIf="!showJourney" class="home-content">
+      <!-- How It Works Section -->
+      <section class="how-it-works">
+        <h2>How TXCart Works</h2>
+        <div class="process-steps">
+          <div class="process-step" *ngFor="let feature of features; let i = index">
+            <div class="step-number">{{ i + 1 }}</div>
+            <div class="step-icon"><mat-icon>{{ feature.icon }}</mat-icon></div>
+            <h3>{{ feature.title }}</h3>
+            <p>{{ feature.description }}</p>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Benefits Section -->
+      <section class="benefits-section">
+        <div class="benefits-content">
+          <h2>Why Choose TXCart</h2>
+          <p>Our platform offers a streamlined approach to healthcare planning</p>
+          
+          <ul class="benefits-list">
+            <li>
+              <span class="benefit-icon"><mat-icon>check_circle</mat-icon></span>
+              <div class="benefit-text">
+                <h4>Transparent Pricing</h4>
+                <p>Compare costs across different surgeons and hospitals</p>
+              </div>
+            </li>
+            <li>
+              <span class="benefit-icon"><mat-icon>verified_user</mat-icon></span>
+              <div class="benefit-text">
+                <h4>Verified Reviews</h4>
+                <p>Read authentic patient experiences and outcomes</p>
+              </div>
+            </li>
+            <li>
+              <span class="benefit-icon"><mat-icon>person_search</mat-icon></span>
+              <div class="benefit-text">
+                <h4>Personalized Matches</h4>
+                <p>Find healthcare providers that meet your specific needs</p>
+              </div>
+            </li>
+            <li>
+              <span class="benefit-icon"><mat-icon>event_available</mat-icon></span>
+              <div class="benefit-text">
+                <h4>Seamless Scheduling</h4>
+                <p>Book appointments directly through our platform</p>
+              </div>
+            </li>
+          </ul>
+          
+          <button (click)="showJourney = true" class="start-journey-button">
+            Start Your Journey Now
+          </button>
+        </div>
+        <div class="benefits-image">
+          <img src="assets/images/healthcare-benefits.jpg" alt="Healthcare Benefits" />
+        </div>
+      </section>
+      
+      <!-- Testimonials Section -->
+      <section class="testimonials-section">
+        <h2>Patient Success Stories</h2>
+        <div class="testimonial-slider">
+          <div class="testimonial-card">
+            <div class="quote-icon"><mat-icon>format_quote</mat-icon></div>
+            <p class="testimonial-content">"TXCart made it so easy to find the right surgeon and hospital for my knee replacement. The entire process was smooth and I felt informed every step of the way."</p>
+            <div class="testimonial-author">
+              <div class="author-image">
+                <img src="assets/images/patient1.jpg" alt="Rajesh Kumar" />
+              </div>
+              <div class="author-info">
+                <h4>Rajesh Kumar</h4>
+                <p>Knee Replacement Patient</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="slider-controls">
+            <div class="slider-dot active"></div>
+            <div class="slider-dot"></div>
+            <div class="slider-dot"></div>
+          </div>
+        </div>
+      </section>
+    </section>
+  </div>
+  
+  <!-- Stats Section -->
+  <section class="stats-section">
+    <div class="stats-container">
+      <div class="stat-item">
+        <div class="stat-value">
+          <span class="stat-icon"><mat-icon>people</mat-icon></span>10,000+
+        </div>
+        <div class="stat-label">Patients Served</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">
+          <span class="stat-icon"><mat-icon>verified</mat-icon></span>500+
+        </div>
+        <div class="stat-label">Verified Surgeons</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">
+          <span class="stat-icon"><mat-icon>local_hospital</mat-icon></span>200+
+        </div>
+        <div class="stat-label">Partner Hospitals</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">
+          <span class="stat-icon"><mat-icon>thumb_up</mat-icon></span>98%
+        </div>
+        <div class="stat-label">Patient Satisfaction</div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- CTA Section -->
+  <section class="cta-section" *ngIf="!showJourney">
+    <div class="cta-content">
+      <h2>Ready to Start Your Healthcare Journey?</h2>
+      <p>TXCart makes finding the right healthcare options simple and stress-free</p>
+      <div class="cta-buttons">
+        <button (click)="showJourney = true" class="cta-button">Begin Your Journey</button>
+        <button class="cta-secondary">Learn More</button>
+      </div>
+    </div>
+  </section>
+</div>

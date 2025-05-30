@@ -1,0 +1,126 @@
+.public-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+
+  .public-header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    .logo {
+      display: flex;
+      align-items: center;
+      
+      img {
+        height: 40px;
+        margin-right: 10px;
+      }
+      
+      span {
+        font-size: 1.2rem;
+        font-weight: 500;
+      }
+    }
+    
+    .spacer {
+      flex: 1;
+    }
+    
+    .nav-links {
+      a {
+        margin-left: 16px;
+        
+        &.active {
+          background-color: rgba(255, 255, 255, 0.15);
+        }
+      }
+    }
+  }
+  
+  .content-container {
+    flex: 1;
+    padding: 20px;
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+  }
+  
+  .public-footer {
+    background-color: #3f51b5;
+    color: white;
+    padding: 40px 20px 20px;
+    
+    .footer-content {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      max-width: 1200px;
+      margin: 0 auto;
+      
+      .footer-section {
+        flex: 1;
+        min-width: 200px;
+        margin-bottom: 20px;
+        
+        h3 {
+          margin-top: 0;
+          margin-bottom: 16px;
+          font-size: 1.2rem;
+        }
+        
+        p {
+          margin: 8px 0;
+        }
+        
+        .social-links {
+          display: flex;
+          gap: 16px;
+          
+          a {
+            color: white;
+            text-decoration: none;
+            
+            &:hover {
+              opacity: 0.8;
+            }
+          }
+        }
+      }
+    }
+    
+    .copyright {
+      text-align: center;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      
+      p {
+        margin: 0;
+        font-size: 0.9rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .public-layout {
+    .public-header {
+      .nav-links {
+        a {
+          margin-left: 8px;
+          padding: 0 8px;
+        }
+      }
+    }
+    
+    .footer-content {
+      flex-direction: column;
+      
+      .footer-section {
+        margin-bottom: 30px;
+      }
+    }
+  }
+}

@@ -1,0 +1,42 @@
+<div class="public-layout">
+  <mat-toolbar color="primary" class="public-header">
+    <div class="logo">
+      <img src="assets/images/logo.png" alt="DocFinder Logo" *ngIf="false">
+      <span>{{ title }}</span>
+    </div>
+    <span class="spacer"></span>
+    <nav class="nav-links">
+      <a mat-button routerLink="/public/patient-journey" routerLinkActive="active">Patient Journey</a>
+      <a mat-button href="tel:+911234567890">Contact Us</a>
+    </nav>
+  </mat-toolbar>
+
+  <div class="content-container">
+    <router-outlet></router-outlet>
+  </div>
+
+  <footer class="public-footer">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>DocFinder</h3>
+        <p>Finding the right healthcare for you</p>
+      </div>
+      <div class="footer-section">
+        <h3>Contact</h3>
+        <p>Email: info@docfinder.com</p>
+        <p>Phone: +91 123 456 7890</p>
+      </div>
+      <div class="footer-section">
+        <h3>Follow Us</h3>
+        <div class="social-links">
+          <a href="#" target="_blank"><mat-icon>facebook</mat-icon></a>
+          <a href="#" target="_blank"><mat-icon>twitter</mat-icon></a>
+          <a href="#" target="_blank"><mat-icon>instagram</mat-icon></a>
+        </div>
+      </div>
+    </div>
+    <div class="copyright">
+      <p>&copy; 2025 DocFinder. All rights reserved.</p>
+    </div>
+  </footer>
+</div>

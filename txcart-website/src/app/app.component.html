@@ -1,0 +1,67 @@
+<header class="site-header">
+  <div class="container">
+    <div class="logo">
+      <a routerLink="/">TXCart</a>
+    </div>
+    <nav class="main-nav">
+      <ul>
+        <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a></li>
+        <li><a routerLink="/patient-journey" routerLinkActive="active">Patient Journey</a></li>
+        <li><a href="#">Surgeries</a></li>
+        <li><a href="#">Surgeons</a></li>
+      </ul>
+    </nav>
+    <div class="header-actions">
+      <button class="btn-outline-sm">Sign In</button>
+      <button class="btn-primary-sm">Get Started</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <router-outlet></router-outlet>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>TXCart</h3>
+        <p>Your healthcare journey made simple</p>
+        <div class="social-icons">
+          <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+          <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        </div>
+      </div>
+      <div class="footer-section">
+        <h3>Contact</h3>
+        <p><i class="fas fa-envelope"></i> Email: info&#64;txcart.com</p>
+        <p><i class="fas fa-phone-alt"></i> Phone: +91 123 456 7890</p>
+        <p><i class="fas fa-map-marker-alt"></i> Address: 123 Healthcare Ave, Medical District</p>
+      </div>
+      <div class="footer-section">
+        <h3>Quick Links</h3>
+        <ul>
+          <li><a routerLink="/"><i class="fas fa-chevron-right"></i> Home</a></li>
+          <li><a routerLink="/patient-journey"><i class="fas fa-chevron-right"></i> Patient Journey</a></li>
+          <li><a href="#"><i class="fas fa-chevron-right"></i> About Us</a></li>
+          <li><a href="#"><i class="fas fa-chevron-right"></i> Testimonials</a></li>
+          <li><a href="#"><i class="fas fa-chevron-right"></i> FAQ</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h3>Newsletter</h3>
+        <p>Stay updated with our latest healthcare news and features</p>
+        <div class="newsletter-form">
+          <input type="email" placeholder="Enter your email">
+          <button type="submit">Subscribe</button>
+        </div>
+      </div>
+    </div>
+    <div class="copyright">
+      <p>&copy; 2025 TXCart. All rights reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+    </div>
+  </div>
+</footer>

@@ -82,7 +82,7 @@
     </ng-container>
     <ng-container matColumnDef="languagesSpoken">
       <th mat-header-cell *matHeaderCellDef>Languages</th>
-      <td mat-cell *matCellDef="let doctor">{{ doctor.languagesSpoken.join(', ') }}</td>
+      <td mat-cell *matCellDef="let doctor">{{ doctor.languagesSpoken?.join(', ') || 'Not specified' }}</td>
     </ng-container>
     <ng-container matColumnDef="gender">
       <th mat-header-cell *matHeaderCellDef>Gender</th>
