@@ -13,6 +13,9 @@ const port = 3000;
 app.use(cors());
 app.use(express.json());
 
+// Serve static files from assets directory
+app.use('/assets', express.static('assets'));
+
 // API Routes
 app.get('/api/doctors', (req, res) => {
   res.json(doctors);

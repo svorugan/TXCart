@@ -185,52 +185,35 @@ export class PatientJourneyComponent implements OnInit {
   }
   
   loadSurgeons(): void {
-    // In a real app, this would come from a service
-    this.surgeons = [
-      {
-        id: 1,
-        name: 'Dr. Anil Sharma',
-        specialty: 'Orthopedic',
-        experience: 15,
-        rating: 4.8,
-        reviews: 120,
-        hospital: 'Apollo Hospital',
-        availability: 'Available next week',
-        image: 'assets/images/doctor1.jpg',
-        bio: 'Specializes in knee and hip replacements with over 15 years of experience.',
-        price: 50000,
-        procedures: 500
-      },
-      {
-        id: 2,
-        name: 'Dr. Priya Patel',
-        specialty: 'Orthopedic',
-        experience: 12,
-        rating: 4.6,
-        reviews: 95,
-        hospital: 'Fortis Hospital',
-        availability: 'Available this week',
-        image: 'assets/images/doctor2.jpg',
-        bio: 'Expert in minimally invasive joint replacement surgeries.',
-        price: 45000,
-        procedures: 350
-      },
-      {
-        id: 3,
-        name: 'Dr. Rajesh Kumar',
-        specialty: 'Neurosurgery',
-        experience: 20,
-        rating: 4.9,
-        reviews: 150,
-        hospital: 'AIIMS',
-        availability: 'Limited availability',
-        image: 'assets/images/doctor3.jpg',
-        bio: 'Pioneer in spine surgeries with international training.',
-        price: 60000,
-        procedures: 700
-      }
-    ];
-    this.filteredSurgeons = [...this.surgeons];
+    // Fetch surgeons from the API server
+    this.patientService.getSurgeons().subscribe(data => {
+      // Map the API data to our Surgeon interface
+      this.surgeons = data.map(doctor => {
+        // Construct proper image URL by replacing 'assets/' with the API server URL
+        let imageUrl = doctor.imageUrl || doctor.avatar || 'assets/images/default-doctor.jpg';
+        
+        // If the image path starts with 'assets/', prepend the API server URL
+        if (imageUrl.startsWith('assets/')) {
+          imageUrl = `http://localhost:3000/${imageUrl}`;
+        }
+        
+        return {
+          id: doctor.id,
+          name: doctor.name,
+          specialty: doctor.specialty,
+          experience: doctor.yearsExperience || doctor.experience || 0,
+          rating: doctor.rating,
+          reviews: doctor.reviewCount || doctor.reviews || 0,
+          hospital: doctor.hospital || '',
+          availability: `Available in ${doctor.availableNextDays || doctor.availableIn || 0} days`,
+          image: imageUrl,
+          bio: doctor.qualification || '',
+          price: 50000, // Default price since API doesn't provide this
+          procedures: doctor.surgeryCount || 0
+        };
+      });
+      this.filteredSurgeons = [...this.surgeons];
+    });
   }
   
   loadImplants(): void {

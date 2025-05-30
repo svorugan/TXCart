@@ -621,4 +621,17 @@ export class PatientViewComponent implements OnInit, AfterViewInit {
       }
     }
   }
+  
+  // Helper method to get the full image URL from the API server
+  getImageUrl(surgeon: Surgeon): string {
+    // If the surgeon has an imageUrl or avatar that starts with 'assets/'
+    if (surgeon.imageUrl && surgeon.imageUrl.startsWith('assets/')) {
+      return `http://localhost:3000/${surgeon.imageUrl}`;
+    } else if (surgeon.avatar && surgeon.avatar.startsWith('assets/')) {
+      return `http://localhost:3000/${surgeon.avatar}`;
+    }
+    
+    // Fallback to the local assets if no valid URL is found
+    return 'assets/images/default-avatar.jpg';
+  }
 }
