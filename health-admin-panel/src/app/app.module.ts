@@ -28,6 +28,8 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatTableModule } from '@angular/material/table';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatDividerModule } from '@angular/material/divider';
 
 // Components
 import { AppComponent } from './app.component';
@@ -45,6 +47,11 @@ import { PatientModule } from './modules/patient/patient.module';
 import { PatientViewModule } from './modules/patient/patient-view.module';
 import { PatientManagementComponent } from './modules/patient/patient-management.component';
 
+// Auth Module
+import { AuthModule } from './modules/auth/auth.module';
+import { LoginComponent } from './modules/auth/login/login.component';
+import { AuthGuard } from './modules/auth/guards/auth.guard';
+
 // Services
 import { PatientService } from './modules/patient/patient.service';
 import { DoctorService } from './modules/doctor/doctor.service';
@@ -54,14 +61,15 @@ import { ImplantsService } from './modules/implants/implants.service';
 
 const routes: Routes = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
-  { path: 'dashboard', component: DashboardComponent },
-  { path: 'hospitals', component: HospitalManagementComponent },
-  { path: 'doctors/add', component: DoctorAddComponent },
-  { path: 'doctors/edit/:id', component: DoctorAddComponent },
-  { path: 'doctors', component: DoctorManagementComponent },
-  { path: 'implants', component: ImplantsManagementComponent },
-  { path: 'diagnostics', component: DiagnosticsManagementComponent },
-  { path: 'patients', component: PatientManagementComponent },
+  { path: 'login', component: LoginComponent },
+  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
+  { path: 'hospitals', component: HospitalManagementComponent, canActivate: [AuthGuard] },
+  { path: 'doctors/add', component: DoctorAddComponent, canActivate: [AuthGuard] },
+  { path: 'doctors/edit/:id', component: DoctorAddComponent, canActivate: [AuthGuard] },
+  { path: 'doctors', component: DoctorManagementComponent, canActivate: [AuthGuard] },
+  { path: 'implants', component: ImplantsManagementComponent, canActivate: [AuthGuard] },
+  { path: 'diagnostics', component: DiagnosticsManagementComponent, canActivate: [AuthGuard] },
+  { path: 'patients', component: PatientManagementComponent, canActivate: [AuthGuard] },
   { path: '**', redirectTo: '/dashboard' }
 ];
 
@@ -78,6 +86,7 @@ const routes: Routes = [
     FormsModule,
     ReactiveFormsModule,
     RouterModule.forRoot(routes),
+    AuthModule,
     DoctorModule,
     ImplantsModule,
     DiagnosticsModule,
@@ -106,7 +115,9 @@ const routes: Routes = [
     MatChipsModule,
     MatBadgeModule,
     MatTableModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatMenuModule,
+    MatDividerModule
   ],
   providers: [
     PatientService,

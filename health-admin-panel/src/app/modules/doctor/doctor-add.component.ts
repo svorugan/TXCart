@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray, FormControl, AbstractControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Doctor } from './doctor.model';
 import { DoctorService } from './doctor.service';
@@ -10,6 +10,48 @@ import { DoctorService } from './doctor.service';
   styleUrls: ['./doctor-add.component.scss']
 })
 export class DoctorAddComponent implements OnInit {
+  asFormControl(ctrl: AbstractControl | null): FormControl {
+    return ctrl as FormControl;
+  }
+
+
+  // --- File upload handlers ---
+  onPhotoSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length) {
+      const file = input.files[0];
+      // Store the file object for form submission
+      this.form.patchValue({ photoFile: file });
+      
+      // Create a URL for display in the UI
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const dataUrl = e.target?.result as string;
+        this.form.patchValue({ photo: dataUrl });
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  onQualificationProofSelected(event: Event, index: number) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length) {
+      const file = input.files[0];
+      const qualifications = this.qualificationsControls;
+      if (qualifications[index]) {
+        qualifications[index].patchValue({ proof: file });
+      }
+    }
+  }
+
+  onRegistrationProofSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length) {
+      const file = input.files[0];
+      this.form.patchValue({ registrationProof: file });
+    }
+  }
+
   form: FormGroup;
   isSubmitting = false;
   isEditMode = false;
@@ -25,15 +67,25 @@ export class DoctorAddComponent implements OnInit {
     this.form = this.fb.group({
       // Tab 1: Basic Information
       name: ['', Validators.required],
-      photoUrl: [''],
+      photo: [null], // for display (data URL)
+      photoFile: [null], // actual file object for upload
+      city: ['', Validators.required],
       specialty: ['', Validators.required],
-      qualifications: this.fb.array([this.fb.control('')]),
-      experience: ['', Validators.required],
+      qualifications: this.fb.array([this.fb.group({
+        degree: [''],
+        institution: [''],
+        year: [''],
+        proof: [null] // file upload
+      })]),
+      experience: ['', [Validators.required, Validators.min(0)]],
       languagesSpoken: [''],
       gender: ['', Validators.required],
       
       // Tab 2: Professional Details
       medicalLicenseNo: [''],
+      registrationCouncil: [''],
+      registrationYear: [''],
+      registrationProof: [null], // file upload
       hospitalAffiliations: this.fb.array([this.fb.control('')]),
       clinicName: [''],
       clinicLocation: [''],
@@ -55,6 +107,13 @@ export class DoctorAddComponent implements OnInit {
       locationMap: [''],
       email: [''],
       phone: [''],
+
+      // Identity Proof
+      identityProofType: [''],
+      identityProofFiles: this.fb.array([]), // array for multiple uploads
+
+      // Establishment
+      establishmentType: ['', Validators.required],
       
       // Tab 5: About & Reviews
       about: [''],
@@ -78,7 +137,10 @@ export class DoctorAddComponent implements OnInit {
 
   // Basic Information
   get qualifications() { return this.form.get('qualifications') as FormArray; }
-  get qualificationsControls(): FormControl[] { return this.qualifications.controls as FormControl[]; }
+  get qualificationsControls() { return this.qualifications.controls as FormGroup[]; }
+
+  // Identity Proof
+  get identityProofFiles() { return this.form.get('identityProofFiles') as FormArray; }
 
   // Professional Details
   get hospitalAffiliations() { return this.form.get('hospitalAffiliations') as FormArray; }
@@ -207,7 +269,13 @@ export class DoctorAddComponent implements OnInit {
   submit() {
     if (this.form.invalid) return;
     this.isSubmitting = true;
-    const value = this.form.value;
+    const value = {...this.form.value};
+    
+    // Use the photoFile for submission if available
+    if (value.photoFile) {
+      value.photo = value.photoFile;
+    }
+    delete value.photoFile; // Remove the temporary field
     
     // Process string arrays from comma-separated inputs
     value.languagesSpoken = value.languagesSpoken ? value.languagesSpoken.split(',').map((s: string) => s.trim()) : [];

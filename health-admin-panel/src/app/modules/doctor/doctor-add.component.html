@@ -9,6 +9,19 @@
           <div class="info-card">
             <h3>Personal Details</h3>
             <div class="tab-content">
+              <div class="profile-photo-section full-width">
+  <div class="avatar-wrapper">
+    <img [src]="form.value.photo || 'assets/default-avatar.png'" alt="Profile Photo" class="profile-avatar" />
+    <input #photoInput type="file" accept="image/*" (change)="onPhotoSelected($event)" hidden />
+  </div>
+  <div class="edit-photo-btn">
+    <button mat-button color="primary" type="button" (click)="photoInput.click()">EDIT PHOTO</button>
+    <button *ngIf="form.value.photo" mat-mini-fab color="warn" type="button" (click)="form.patchValue({photo: null, photoFile: null})" style="margin-left:8px;">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+</div>
+
               <mat-form-field appearance="outline" class="full-width">
                 <mat-label>Full Name</mat-label>
                 <input matInput formControlName="name" required placeholder="Dr. Aditi Rao">
@@ -24,11 +37,11 @@
                 </mat-select>
                 <mat-icon matSuffix>wc</mat-icon>
               </mat-form-field>
-              
+
               <mat-form-field appearance="outline" class="half-width">
-                <mat-label>Photo URL</mat-label>
-                <input matInput formControlName="photoUrl" placeholder="https://example.com/doctor-photo.jpg">
-                <mat-icon matSuffix>image</mat-icon>
+                <mat-label>City</mat-label>
+                <input matInput formControlName="city" required placeholder="Hyderabad, Telangana">
+                <mat-icon matSuffix>location_city</mat-icon>
               </mat-form-field>
             </div>
           </div>
@@ -44,13 +57,8 @@
               </mat-form-field>
               
               <mat-form-field appearance="outline" class="half-width">
-                <mat-label>Experience</mat-label>
-                <mat-select formControlName="experience" required>
-                  <mat-option value="5+ years">5+ years</mat-option>
-                  <mat-option value="10+ years">10+ years</mat-option>
-                  <mat-option value="15+ years">15+ years</mat-option>
-                  <mat-option value="20+ years">20+ years</mat-option>
-                </mat-select>
+                <mat-label>Experience (in years)</mat-label>
+                <input matInput type="number" min="0" formControlName="experience" required placeholder="10">
                 <mat-icon matSuffix>history</mat-icon>
               </mat-form-field>
               
@@ -69,10 +77,29 @@
             <div class="dynamic-list">
               <div *ngFor="let ctrl of qualificationsControls; let i = index" class="dynamic-list-item">
                 <mat-form-field appearance="outline" style="flex:1">
-                  <mat-label>Qualification {{i+1}}</mat-label>
-                  <input matInput [formControl]="ctrl" placeholder="MBBS, MS (Orthopedics), DNB">
+                  <mat-label>Degree</mat-label>
+                  <ng-container *ngIf="ctrl.get('degree') as degreeCtrl">
+                    <input matInput [formControl]="asFormControl(degreeCtrl)" placeholder="MBBS, MS (Orthopedics), DNB">
+                  </ng-container>
                   <mat-icon matSuffix>school</mat-icon>
                 </mat-form-field>
+                <mat-form-field appearance="outline" style="flex:1">
+                  <mat-label>Institution</mat-label>
+                  <ng-container *ngIf="ctrl.get('institution') as institutionCtrl">
+                    <input matInput [formControl]="asFormControl(institutionCtrl)" placeholder="Medical College">
+                  </ng-container>
+                </mat-form-field>
+                <mat-form-field appearance="outline" style="flex:1">
+                  <mat-label>Year</mat-label>
+                  <ng-container *ngIf="ctrl.get('year') as yearCtrl">
+                    <input matInput type="number" [formControl]="asFormControl(yearCtrl)" placeholder="2017">
+                  </ng-container>
+                </mat-form-field>
+                <div class="file-upload-group">
+                  <label>Upload Proof</label>
+                  <input type="file" accept="image/*,application/pdf" (change)="onQualificationProofSelected($event, i)" />
+                  <span *ngIf="ctrl.value.proof">File selected</span>
+                </div>
                 <button mat-mini-fab color="primary" type="button" (click)="addItem(qualifications)" aria-label="Add qualification">
                   <mat-icon>add</mat-icon>
                 </button>
@@ -91,13 +118,26 @@
         <div class="card-layout">
           <!-- License & Credentials Card -->
           <div class="info-card">
-            <h3>License & Credentials</h3>
+            <h3>Registration Details and Proof</h3>
             <div class="tab-content">
-              <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Medical License No.</mat-label>
-                <input matInput formControlName="medicalLicenseNo" placeholder="ORTHO-56789">
+              <mat-form-field appearance="outline" class="half-width">
+                <mat-label>Registration No.</mat-label>
+                <input matInput formControlName="medicalLicenseNo" placeholder="71622">
                 <mat-icon matSuffix>verified</mat-icon>
               </mat-form-field>
+              <mat-form-field appearance="outline" class="half-width">
+                <mat-label>Registration Council</mat-label>
+                <input matInput formControlName="registrationCouncil" placeholder="Andhra Pradesh Medical Council">
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="half-width">
+                <mat-label>Registration Year</mat-label>
+                <input matInput type="number" formControlName="registrationYear" placeholder="2011">
+              </mat-form-field>
+              <div class="file-upload-group">
+                <label>Upload Registration Proof</label>
+                <input type="file" accept="image/*,application/pdf" (change)="onRegistrationProofSelected($event)" />
+                <span *ngIf="form.value.registrationProof">File selected</span>
+              </div>
               
               <mat-form-field appearance="outline" class="half-width">
                 <mat-label>Fellowship Type</mat-label>
@@ -152,10 +192,20 @@
               </mat-form-field>
               
               <mat-form-field appearance="outline" class="half-width">
-                <mat-label>Clinic Location</mat-label>
-                <input matInput formControlName="clinicLocation" placeholder="Banjara Hills">
+                <mat-label>Locality</mat-label>
+                <input matInput formControlName="clinicLocation" placeholder="Select Locality">
                 <mat-icon matSuffix>place</mat-icon>
               </mat-form-field>
+
+              <div class="info-card">
+                <h3>Type of Establishment</h3>
+                <mat-radio-group formControlName="establishmentType" class="full-width">
+                  <mat-radio-button value="Owner">Owner of establishment</mat-radio-button>
+                  <mat-radio-button value="Consultant">Consultant doctor</mat-radio-button>
+                  <mat-radio-button value="Rented">Rented at other establishment</mat-radio-button>
+                  <mat-radio-button value="Home">Practicing at home</mat-radio-button>
+                </mat-radio-group>
+              </div>
               
               <mat-form-field appearance="outline" class="full-width">
                 <mat-label>Working Hours</mat-label>

@@ -10,10 +10,12 @@ import { DoctorManagementComponent } from './doctor-management.component';
 import { DoctorAddComponent } from './doctor-add.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
+import { MatRadioModule } from '@angular/material/radio';
 import { RouterModule } from '@angular/router';
+import { SafeUrlPipe } from './safe-url.pipe';
 
 @NgModule({
-  declarations: [DoctorManagementComponent, DoctorAddComponent],
+  declarations: [DoctorManagementComponent, DoctorAddComponent, SafeUrlPipe],
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -25,6 +27,7 @@ import { RouterModule } from '@angular/router';
     MatTableModule,
     MatTabsModule,
     MatIconModule,
+    MatRadioModule,
     RouterModule
   ],
   exports: [DoctorManagementComponent, DoctorAddComponent]

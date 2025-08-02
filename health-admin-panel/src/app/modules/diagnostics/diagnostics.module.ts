@@ -20,9 +20,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { DiagnosticsManagementComponent } from './diagnostics-management.component';
 import { DiagnosticDialogComponent } from './diagnostic-dialog.component';
 
-const routes: Routes = [
-  { path: '', component: DiagnosticsManagementComponent }
-];
+// We don't need routes here as the main app module handles routing to this component
+const routes: Routes = [];
 
 @NgModule({
   declarations: [

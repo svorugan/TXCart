@@ -1,1 +1,0 @@
-import{Ca as i,O as t,wb as e}from"./chunk-DKFLPH76.js";var r=class o{static \u0275fac=function(m){return new(m||o)};static \u0275mod=i({type:o});static \u0275inj=t({imports:[e]})};export{r as HospitalModule};
