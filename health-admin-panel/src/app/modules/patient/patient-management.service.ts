@@ -32,7 +32,7 @@ export interface Patient {
   providedIn: 'root'
 })
 export class PatientManagementService {
-  private apiUrl = `${environment.apiUrl}/api/patients`;
+  private apiUrl = `${environment.apiUrl}/patients`;
 
   constructor(private http: HttpClient) { }
 
