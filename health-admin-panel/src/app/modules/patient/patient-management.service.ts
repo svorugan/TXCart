@@ -34,7 +34,10 @@ export interface Patient {
 export class PatientManagementService {
   private apiUrl = `${environment.apiUrl}/patients`;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    console.log('PatientManagementService initialized with API URL:', this.apiUrl);
+    console.log('Environment API URL:', environment.apiUrl);
+  }
 
   getPatients(): Observable<Patient[]> {
     return this.http.get<Patient[]>(this.apiUrl)
@@ -87,6 +90,8 @@ export class PatientManagementService {
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.error(`${operation} failed: ${error.message}`);
+      console.error('Full error:', error);
+      console.error('API URL being used:', this.apiUrl);
       
       // Let the app keep running by returning an empty result
       return of(result as T);
