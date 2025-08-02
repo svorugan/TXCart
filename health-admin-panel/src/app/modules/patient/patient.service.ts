@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 export interface Surgeon {
   id: number;
@@ -67,9 +68,9 @@ export interface Surgery {
 export class PatientService {
   // Using mock data instead of API endpoints
   private useMockData = true;
-  private surgeonsUrl = '/api/doctors';
-  private implantsUrl = '/api/implants';
-  private zonesUrl = '/api/hospitals';
+  private surgeonsUrl = `${environment.apiUrl}/doctors`;
+  private implantsUrl = `${environment.apiUrl}/implants`;
+  private zonesUrl = `${environment.apiUrl}/hospitals`;
 
   constructor(private http: HttpClient) {}
 

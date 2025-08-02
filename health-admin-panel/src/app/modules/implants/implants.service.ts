@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
 
 export interface Implant {
   id: string;
@@ -40,7 +41,7 @@ export const surgeryTypeMap: Record<string, string> = {
   providedIn: 'root'
 })
 export class ImplantsService {
-  private apiUrl = 'http://localhost:3000/api/implants';
+  private apiUrl = `${environment.apiUrl}/implants`;
 
   constructor(private http: HttpClient) { }
 
