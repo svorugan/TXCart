@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { PatientService } from '../../modules/patient/patient.service';
 import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
 
 interface Surgery {
   id: number;
@@ -192,9 +193,9 @@ export class PatientJourneyComponent implements OnInit {
         // Construct proper image URL by replacing 'assets/' with the API server URL
         let imageUrl = doctor.imageUrl || doctor.avatar || 'assets/images/default-doctor.jpg';
         
-        // If the image path starts with 'assets/', prepend the API server URL
+        // If the image path starts with 'assets/', prepend the asset server URL
         if (imageUrl.startsWith('assets/')) {
-          imageUrl = `http://localhost:3000/${imageUrl}`;
+          imageUrl = `${environment.assetUrl}/${imageUrl}`;
         }
         
         return {

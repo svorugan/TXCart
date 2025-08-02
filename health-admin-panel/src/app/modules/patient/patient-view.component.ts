@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatStepper } from '@angular/material/stepper';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { PatientService, Surgery, Surgeon, Implant, HospitalZone } from './patient.service';
+import { environment } from '../../../environments/environment';
 
 // Declare Leaflet to fix type errors
 declare const L: any;
@@ -626,9 +627,9 @@ export class PatientViewComponent implements OnInit, AfterViewInit {
   getImageUrl(surgeon: Surgeon): string {
     // If the surgeon has an imageUrl or avatar that starts with 'assets/'
     if (surgeon.imageUrl && surgeon.imageUrl.startsWith('assets/')) {
-      return `http://localhost:3000/${surgeon.imageUrl}`;
+      return `${environment.assetUrl}/${surgeon.imageUrl}`;
     } else if (surgeon.avatar && surgeon.avatar.startsWith('assets/')) {
-      return `http://localhost:3000/${surgeon.avatar}`;
+      return `${environment.assetUrl}/${surgeon.avatar}`;
     }
     
     // Fallback to the local assets if no valid URL is found

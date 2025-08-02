@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
 
 export interface Patient {
   id: number;
@@ -31,7 +32,7 @@ export interface Patient {
   providedIn: 'root'
 })
 export class PatientManagementService {
-  private apiUrl = '/api/patients';
+  private apiUrl = `${environment.apiUrl}/api/patients`;
 
   constructor(private http: HttpClient) { }
 
